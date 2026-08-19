@@ -1,0 +1,536 @@
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Usuario {
+  idUsuario          Int       @id @default(autoincrement()) @map("id_usuario")
+  idTipoDocumento    Int?      @map("id_tipo_documento")
+  nombre             String?   @db.VarChar(100)
+  apellido           String?   @db.VarChar(100)
+  correo             String?   @unique @db.VarChar(150)
+  contrasenaHash     String?   @map("contrasena_hash") @db.VarChar(255)
+  telefono           String?   @db.VarChar(15)
+  direccion          String?   @db.VarChar(100)
+  idAreaEspecialidad Int?      @map("id_area_especialidad")
+  fechaRegistro      DateTime? @default(now()) @map("fecha_registro")
+  idRol              Int?      @map("id_rol")
+  activo             Boolean?  @default(true)
+
+  tipoDocumento       TipoDocumento?       @relation(fields: [idTipoDocumento], references: [idTipoDocumento])
+  areaEspecialidad    AreaEspecialidad?    @relation(fields: [idAreaEspecialidad], references: [idAreaEspecialidad])
+  rol                 Rol?                 @relation(fields: [idRol], references: [idRol])
+  asesoriasLegacy     Asesoria[]           @relation("AsesoriasUsuarioLegacy")
+  asesoriasSolicitadas Asesoria[]          @relation("AsesoriasSolicitante")
+  asesoriasAsignadas  Asesoria[]           @relation("AsesoriasAsesor")
+  citasCliente        Cita[]               @relation("CitasCliente")
+  citasTecnico        Cita[]               @relation("CitasTecnico")
+  comentarios         Comentario[]
+  equipos             Equipo[]
+  notificaciones      Notificacion[]
+  pagos               Pago[]
+  cotizacionesCliente Cotizacion[]        @relation("CotizacionesCliente")
+  cotizacionesTecnico Cotizacion[]        @relation("CotizacionesTecnico")
+  recuperacionesContrasena RecuperacionContrasena[]
+  mensajesAsesoriaEnviados MensajeAsesoria[] @relation("MensajesAsesoriaRemitente")
+  reportes            Reporte[]
+  resenas             Resena[]
+  respuestas          RespuestaComentario[]
+  solicitudesServicio SolicitudServicio[]
+  ubicacionesTecnico  UbicacionTecnico[]
+  verificacionesPago  VerificacionPago[]
+  ayudasCreadas       Ayuda[]              @relation("AyudasAutor")
+
+  @@index([idTipoDocumento])
+  @@index([idAreaEspecialidad])
+  @@index([idRol])
+  @@map("usuarios")
+}
+
+model RecuperacionContrasena {
+  idRecuperacion  Int      @id @default(autoincrement()) @map("id_recuperacion")
+  idUsuario       Int      @map("id_usuario")
+  tokenHash       String   @map("token_hash") @db.VarChar(255)
+  fechaExpiracion DateTime @map("fecha_expiracion")
+  usado           Boolean  @default(false)
+  fechaUso        DateTime? @map("fecha_uso")
+  fechaCreacion   DateTime @default(now()) @map("fecha_creacion")
+
+  usuario Usuario @relation(fields: [idUsuario], references: [idUsuario], onDelete: Cascade, onUpdate: Cascade)
+
+  @@index([idUsuario], map: "idx_recuperaciones_usuario")
+  @@index([tokenHash], map: "idx_recuperaciones_token_hash")
+  @@map("recuperaciones_contrasena")
+}
+
+model Rol {
+  idRol     Int       @id @default(autoincrement()) @map("id_rol")
+  nombreRol String?   @unique @map("nombre_rol") @db.VarChar(50)
+  usuarios  Usuario[]
+
+  @@map("roles")
+}
+
+model TipoDocumento {
+  idTipoDocumento          Int       @id @default(autoincrement()) @map("id_tipo_documento")
+  nombreTipoDocumento      String?   @unique @map("nombre_tipo_documento") @db.VarChar(50)
+  abreviaturaTipoDocumento String?   @unique @map("abreviatura_tipo_documento") @db.VarChar(10)
+  usuarios                 Usuario[]
+
+  @@map("tipos_documento")
+}
+
+model AreaEspecialidad {
+  idAreaEspecialidad     Int        @id @default(autoincrement()) @map("id_area_especialidad")
+  nombreAreaEspecialidad String?    @unique @map("nombre_area_especialidad") @db.VarChar(50)
+  asesorias              Asesoria[]
+  usuarios               Usuario[]
+
+  @@map("areas_especialidad")
+}
+
+model SolicitudServicio {
+  idSolicitudServicio Int       @id @default(autoincrement()) @map("id_solicitud_servicio")
+  idUsuario           Int?      @map("id_usuario")
+  idEquipo            String?   @map("id_equipo") @db.VarChar(25)
+  idTipoServicio      Int?      @map("id_tipo_servicio")
+  descripcionProblema String?   @map("descripcion_problema") @db.VarChar(255)
+  idPrioridad         Int?      @map("id_prioridad")
+  fechaSolicitud      DateTime? @default(now()) @map("fecha_solicitud")
+  idEstado            Int?      @map("id_estado")
+
+  usuario      Usuario?      @relation(fields: [idUsuario], references: [idUsuario])
+  equipo       Equipo?       @relation(fields: [idEquipo], references: [idEquipo])
+  tipoServicio TipoServicio? @relation(fields: [idTipoServicio], references: [idTipoServicio])
+  prioridad    Prioridad?    @relation(fields: [idPrioridad], references: [idPrioridad])
+  estado       Estado?       @relation(fields: [idEstado], references: [idEstado])
+  citas        Cita[]
+  cotizacion   Cotizacion?
+  resenas      Resena[]
+  asesoriaOrigen Asesoria? @relation("AsesoriaSolicitudServicio")
+  ubicacionServicio UbicacionServicio?
+  ubicacionesTecnico UbicacionTecnico[]
+
+  @@index([idUsuario])
+  @@index([idEquipo])
+  @@index([idTipoServicio])
+  @@index([idPrioridad])
+  @@index([idEstado])
+  @@map("solicitudes_servicio")
+}
+
+model TipoServicio {
+  idTipoServicio      Int                 @id @default(autoincrement()) @map("id_tipo_servicio")
+  nombreServicio      String?             @map("nombre_servicio") @db.VarChar(150)
+  descripcionServicio String?             @map("descripcion_servicio") @db.VarChar(225)
+  costo               Decimal?            @db.Decimal(10, 2)
+  solicitudes         SolicitudServicio[]
+  asesorias           Asesoria[]
+
+  @@map("tipos_servicio")
+}
+
+model Cita {
+  idCita              Int       @id @default(autoincrement()) @map("id_cita")
+  idSolicitudServicio Int?      @unique(map: "uq_citas_id_solicitud_servicio") @map("id_solicitud_servicio")
+  idUsuarioCliente    Int?      @map("id_usuario_cliente")
+  idUsuarioTecnico    Int?      @map("id_usuario_tecnico")
+  fecha               DateTime? @db.Date
+  hora                DateTime? @db.Time(0)
+  confirmada          Boolean?  @default(false)
+  idEstado            Int?      @map("id_estado")
+
+  solicitudServicio SolicitudServicio? @relation(fields: [idSolicitudServicio], references: [idSolicitudServicio])
+  cliente           Usuario?           @relation("CitasCliente", fields: [idUsuarioCliente], references: [idUsuario])
+  tecnico           Usuario?           @relation("CitasTecnico", fields: [idUsuarioTecnico], references: [idUsuario])
+  estado            Estado?            @relation(fields: [idEstado], references: [idEstado])
+  comentarios       Comentario[]
+  pagos             Pago[]
+
+  @@index([idSolicitudServicio])
+  @@index([idUsuarioCliente])
+  @@index([idUsuarioTecnico])
+  @@index([idEstado])
+  @@map("citas")
+}
+
+model Pago {
+  idPago             Int       @id @default(autoincrement()) @map("id_pago")
+  idCita             Int?      @map("id_cita")
+  idMedioPago        Int?      @map("id_medio_pago")
+  idEstadoPago       Int?      @map("id_estado_pago")
+  idUsuario          Int?      @map("id_usuario")
+  monto              Decimal?  @db.Decimal(10, 2)
+  fechaPago          DateTime? @default(now()) @map("fecha_pago")
+  detalleComprobante String?   @map("detalle_comprobante") @db.Text
+
+  cita              Cita?              @relation(fields: [idCita], references: [idCita])
+  medioPago         MedioPago?         @relation(fields: [idMedioPago], references: [idMedioPago])
+  estadoPago        EstadoPago?        @relation(fields: [idEstadoPago], references: [idEstadoPago])
+  usuario           Usuario?           @relation(fields: [idUsuario], references: [idUsuario])
+  verificacionPago  VerificacionPago?
+  cotizacion         Cotizacion?
+
+  @@index([idCita])
+  @@index([idMedioPago])
+  @@index([idEstadoPago])
+  @@index([idUsuario])
+  @@map("pagos")
+}
+
+model Cotizacion {
+  idCotizacion        Int       @id @default(autoincrement()) @map("id_cotizacion")
+  idSolicitudServicio Int       @unique(map: "uq_cotizaciones_solicitud_servicio") @map("id_solicitud_servicio")
+  idUsuarioCliente    Int       @map("id_usuario_cliente")
+  idUsuarioTecnico    Int       @map("id_usuario_tecnico")
+  idPago              Int?      @unique(map: "uq_cotizaciones_pago") @map("id_pago")
+  monto               Decimal   @db.Decimal(10, 2)
+  descripcion         String?   @db.Text
+  estado              String    @default("Enviada") @db.VarChar(40)
+  fechaCreacion       DateTime  @default(now()) @map("fecha_creacion")
+  fechaRespuesta      DateTime? @map("fecha_respuesta")
+  fechaActualizacion  DateTime? @default(now()) @updatedAt @map("fecha_actualizacion")
+
+  solicitudServicio SolicitudServicio @relation(fields: [idSolicitudServicio], references: [idSolicitudServicio])
+  cliente           Usuario           @relation("CotizacionesCliente", fields: [idUsuarioCliente], references: [idUsuario])
+  tecnico           Usuario           @relation("CotizacionesTecnico", fields: [idUsuarioTecnico], references: [idUsuario])
+  pago              Pago?             @relation(fields: [idPago], references: [idPago])
+
+  @@index([idUsuarioCliente])
+  @@index([idUsuarioTecnico])
+  @@map("cotizaciones")
+}
+
+model Notificacion {
+  idNotificacion      Int       @id @default(autoincrement()) @map("id_notificacion")
+  idUsuario           Int?      @map("id_usuario")
+  idTipoNotificacion  Int?      @map("id_tipo_notificacion")
+  titulo              String?   @db.VarChar(100)
+  mensaje             String?   @db.Text
+  leida               Boolean?  @default(false)
+  fechaEnvio          DateTime? @default(now()) @map("fecha_envio")
+
+  usuario          Usuario?          @relation(fields: [idUsuario], references: [idUsuario])
+  tipoNotificacion TipoNotificacion? @relation(fields: [idTipoNotificacion], references: [idTipoNotificacion])
+  asesorias        Asesoria[]
+
+  @@index([idUsuario])
+  @@index([idTipoNotificacion])
+  @@map("notificaciones")
+}
+
+model Comentario {
+  idComentario     Int       @id @default(autoincrement()) @map("id_comentario")
+  idCita           Int?      @map("id_cita")
+  fechaComentario  DateTime? @default(now()) @map("fecha_comentario")
+  idUsuario        Int?      @map("id_usuario")
+
+  cita       Cita?                  @relation(fields: [idCita], references: [idCita])
+  usuario    Usuario?               @relation(fields: [idUsuario], references: [idUsuario])
+  asesorias  Asesoria[]
+  respuestas RespuestaComentario[]
+
+  @@index([idCita])
+  @@index([idUsuario])
+  @@map("comentarios")
+}
+
+model RespuestaComentario {
+  idRespuesta           Int       @id @default(autoincrement()) @map("id_respuesta")
+  idComentario          Int?      @map("id_comentario")
+  idUsuarioRespondedor  Int?      @map("id_usuario_respondedor")
+  textoRespuesta        String?   @map("texto_respuesta") @db.Text
+  fechaRespuesta        DateTime? @default(now()) @map("fecha_respuesta")
+
+  comentario Comentario? @relation(fields: [idComentario], references: [idComentario])
+  usuario    Usuario?    @relation(fields: [idUsuarioRespondedor], references: [idUsuario])
+
+  @@index([idComentario])
+  @@index([idUsuarioRespondedor])
+  @@map("respuestas_comentarios")
+}
+
+model UbicacionTecnico {
+  idUbicacionTecnico Int       @id @default(autoincrement()) @map("id_ubicacion_tecnico")
+  idUsuario          Int?      @map("id_usuario")
+  idSolicitudServicio Int?     @map("id_solicitud_servicio")
+  latitud            Decimal?  @db.Decimal(10, 8)
+  longitud           Decimal?  @db.Decimal(11, 8)
+  precisionMetros    Decimal?  @map("precision_metros") @db.Decimal(8, 2)
+  fuente             String    @default("gps") @db.VarChar(30)
+  fechaRegistro      DateTime? @default(now()) @map("fecha_registro")
+
+  usuario Usuario? @relation(fields: [idUsuario], references: [idUsuario])
+  solicitudServicio SolicitudServicio? @relation(fields: [idSolicitudServicio], references: [idSolicitudServicio], onDelete: SetNull, onUpdate: Cascade)
+
+  @@index([idUsuario])
+  @@index([idSolicitudServicio, fechaRegistro], map: "idx_ubicaciones_tecnicos_solicitud_fecha")
+  @@map("ubicaciones_tecnicos")
+}
+
+model UbicacionServicio {
+  idUbicacionServicio Int      @id @default(autoincrement()) @map("id_ubicacion_servicio")
+  idSolicitudServicio Int      @unique(map: "uq_ubicaciones_servicios_solicitud") @map("id_solicitud_servicio")
+  latitud             Decimal  @db.Decimal(10, 8)
+  longitud            Decimal  @db.Decimal(11, 8)
+  direccionReferencia String?  @map("direccion_referencia") @db.VarChar(255)
+  fuente              String   @default("manual") @db.VarChar(30)
+  fechaCreacion       DateTime @default(now()) @map("fecha_creacion")
+  fechaActualizacion  DateTime @default(now()) @updatedAt @map("fecha_actualizacion")
+
+  solicitudServicio SolicitudServicio @relation(fields: [idSolicitudServicio], references: [idSolicitudServicio], onDelete: Cascade, onUpdate: Cascade)
+
+  @@index([idSolicitudServicio], map: "idx_ubicaciones_servicios_solicitud")
+  @@map("ubicaciones_servicios")
+}
+
+model Equipo {
+  idEquipo         String    @id @map("id_equipo") @db.VarChar(25)
+  idUsuario        Int?      @map("id_usuario")
+  tipoEquipo       String?   @map("tipo_equipo") @db.VarChar(100)
+  marcaEquipo      String?   @map("marca_equipo") @db.VarChar(100)
+  modeloEquipo     String?   @map("modelo_equipo") @db.VarChar(100)
+  numeroSerie      String?   @unique @map("numero_serie") @db.VarChar(50)
+  sistemaOperativo String?   @map("sistema_operativo") @db.VarChar(100)
+  fechaRegistro    DateTime? @default(now()) @map("fecha_registro")
+  idEstado         Int?      @map("id_estado")
+
+  usuario      Usuario?            @relation(fields: [idUsuario], references: [idUsuario])
+  estado       Estado?             @relation(fields: [idEstado], references: [idEstado])
+  solicitudes  SolicitudServicio[]
+
+  @@index([idUsuario])
+  @@index([idEstado])
+  @@map("equipos")
+}
+
+model Prioridad {
+  idPrioridad     Int                 @id @default(autoincrement()) @map("id_prioridad")
+  nombrePrioridad String?             @unique @map("nombre_prioridad") @db.VarChar(20)
+  solicitudes     SolicitudServicio[]
+
+  @@map("prioridades")
+}
+
+model Estado {
+  idEstado     Int                 @id @default(autoincrement()) @map("id_estado")
+  nombreEstado String?             @unique @map("nombre_estado") @db.VarChar(30)
+  citas        Cita[]
+  equipos      Equipo[]
+  solicitudes  SolicitudServicio[]
+
+  @@map("estados")
+}
+
+model MedioPago {
+  idMedioPago     Int     @id @default(autoincrement()) @map("id_medio_pago")
+  nombreMedioPago String? @unique @map("nombre_medio_pago") @db.VarChar(50)
+  pagos           Pago[]
+  verificaciones  VerificacionPago[]
+
+  @@map("medios_pago")
+}
+
+model VerificacionPago {
+  idVerificacionPago Int       @id @default(autoincrement()) @map("id_verificacion_pago")
+  idPago             Int       @unique(map: "uq_verificaciones_pago_id_pago") @map("id_pago")
+  idUsuarioTecnico   Int?      @map("id_usuario_tecnico")
+  idMedioPagoTecnico Int?      @map("id_medio_pago_tecnico")
+  cantidadIntentos   Int       @default(0) @map("cantidad_intentos")
+  metodosCoinciden   Boolean?  @map("metodos_coinciden")
+  requiereRevision   Boolean   @default(false) @map("requiere_revision")
+  observacion        String?   @db.Text
+  fechaPrimerIntento DateTime? @map("fecha_primer_intento")
+  fechaConfirmacion  DateTime? @map("fecha_confirmacion")
+
+  pago             Pago?      @relation(fields: [idPago], references: [idPago], onDelete: Cascade, onUpdate: Cascade)
+  usuarioTecnico   Usuario?   @relation(fields: [idUsuarioTecnico], references: [idUsuario], onDelete: SetNull, onUpdate: Cascade)
+  medioPagoTecnico MedioPago? @relation(fields: [idMedioPagoTecnico], references: [idMedioPago], onDelete: SetNull, onUpdate: Cascade)
+
+  @@index([idUsuarioTecnico])
+  @@index([idMedioPagoTecnico])
+  @@map("verificaciones_pago")
+}
+
+model EstadoPago {
+  idEstadoPago     Int     @id @default(autoincrement()) @map("id_estado_pago")
+  nombreEstadoPago String  @map("nombre_estado_pago") @db.VarChar(30)
+  descripcion      String? @db.VarChar(100)
+  pagos            Pago[]
+
+  @@map("estados_pago")
+}
+
+model Ayuda {
+  idAyuda              Int       @id @default(autoincrement()) @map("id_ayuda")
+  slug                 String?   @db.VarChar(120)
+  titulo               String    @db.VarChar(100)
+  resumen              String?   @db.VarChar(255)
+  categoria            String?   @db.VarChar(50)
+  tipoContenido        String?   @default("guia") @map("tipo_contenido") @db.VarChar(30)
+  pantallaContexto     String?   @map("pantalla_contexto") @db.VarChar(80)
+  accionContexto       String?   @map("accion_contexto") @db.VarChar(80)
+  descripcion          String?   @db.Text
+  contenido            String?   @db.Text
+  archivoUrl           String?   @map("archivo_url") @db.VarChar(255)
+  videoUrl             String?   @map("video_url") @db.VarChar(255)
+  fechaPublicacion     DateTime? @default(now()) @map("fecha_publicacion")
+  fechaActualizacion   DateTime? @default(now()) @updatedAt @map("fecha_actualizacion")
+  idUsuarioAutor       Int?      @map("id_usuario_autor")
+  estado               String?   @default("Activo") @db.VarChar(20)
+  orden                Int       @default(0)
+
+  autor                Usuario?             @relation("AyudasAutor", fields: [idUsuarioAutor], references: [idUsuario], onDelete: SetNull, onUpdate: Cascade)
+  roles                AyudaRol[]
+  relacionadasOrigen   AyudaRelacionada[]   @relation("AyudaRelacionadasOrigen")
+  relacionadasDestino  AyudaRelacionada[]   @relation("AyudaRelacionadasDestino")
+
+  @@index([slug], map: "idx_ayudas_slug")
+  @@index([estado], map: "idx_ayudas_estado")
+  @@index([categoria], map: "idx_ayudas_categoria")
+  @@index([pantallaContexto, accionContexto], map: "idx_ayudas_contexto")
+  @@index([idUsuarioAutor], map: "idx_ayudas_autor")
+
+  @@map("ayudas")
+}
+
+model AyudaRol {
+  idAyudaRol Int    @id @default(autoincrement()) @map("id_ayuda_rol")
+  idAyuda    Int    @map("id_ayuda")
+  rol        String @db.VarChar(30)
+
+  ayuda Ayuda @relation(fields: [idAyuda], references: [idAyuda], onDelete: Cascade, onUpdate: Cascade)
+
+  @@unique([idAyuda, rol], map: "uq_ayudas_roles_ayuda_rol")
+  @@index([rol], map: "idx_ayudas_roles_rol")
+  @@map("ayudas_roles")
+}
+
+model AyudaRelacionada {
+  idAyudaRelacionada Int @id @default(autoincrement()) @map("id_ayuda_relacionada")
+  idAyuda            Int @map("id_ayuda")
+  idAyudaDestino     Int @map("id_ayuda_destino")
+
+  ayuda        Ayuda @relation("AyudaRelacionadasOrigen", fields: [idAyuda], references: [idAyuda], onDelete: Cascade, onUpdate: Cascade)
+  ayudaDestino Ayuda @relation("AyudaRelacionadasDestino", fields: [idAyudaDestino], references: [idAyuda], onDelete: Cascade, onUpdate: Cascade)
+
+  @@unique([idAyuda, idAyudaDestino], map: "uq_ayudas_relacionadas_origen_destino")
+  @@index([idAyudaDestino], map: "idx_ayudas_relacionadas_destino")
+  @@map("ayudas_relacionadas")
+}
+
+model Asesoria {
+  idAsesoria            Int       @id @default(autoincrement()) @map("id_asesoria")
+  idUsuario             Int?      @map("id_usuario")
+  idUsuarioSolicitante  Int?      @map("id_usuario_solicitante")
+  idUsuarioAsesor       Int?      @map("id_usuario_asesor")
+  fecha                 DateTime? @db.Date
+  hora                  DateTime? @db.Time(0)
+  estado                String?   @default("Programada") @db.VarChar(30)
+  motivo                String?   @db.VarChar(150)
+  descripcion           String?   @db.VarChar(2000)
+  tipoDispositivo       String?   @map("tipo_dispositivo") @db.VarChar(30)
+  telefonoPrincipal     String?   @map("telefono_principal") @db.VarChar(15)
+  telefonoAlterno       String?   @map("telefono_alterno") @db.VarChar(15)
+  idTipoServicio        Int?      @map("id_tipo_servicio")
+  idSolicitudServicio   Int?      @unique(map: "uq_asesorias_solicitud_servicio") @map("id_solicitud_servicio")
+  descripcionServicioFinal String? @map("descripcion_servicio_final") @db.VarChar(1000)
+  fechaCreacion         DateTime? @default(now()) @map("fecha_creacion")
+  fechaActualizacion    DateTime? @default(now()) @updatedAt @map("fecha_actualizacion")
+  idAreaEspecialidad    Int?      @map("id_area_especialidad")
+  idComentario          Int?      @map("id_comentario")
+  idNotificacion        Int?      @map("id_notificacion")
+  datosUsuario          String?   @map("datos_usuario") @db.VarChar(50)
+  tipoAsesoria          String?   @map("tipo_asesoria") @db.VarChar(50)
+  descripcionProblema   String?   @map("descripcion_problema") @db.VarChar(500)
+  areaEspecialidadTexto String?   @map("area_especialidad") @db.VarChar(50)
+  comentario            String?   @db.VarChar(200)
+  medioNotificacion     String?   @map("medio_notificacion") @db.VarChar(50)
+
+  usuario          Usuario?          @relation("AsesoriasUsuarioLegacy", fields: [idUsuario], references: [idUsuario])
+  solicitante      Usuario?          @relation("AsesoriasSolicitante", fields: [idUsuarioSolicitante], references: [idUsuario])
+  asesor           Usuario?          @relation("AsesoriasAsesor", fields: [idUsuarioAsesor], references: [idUsuario])
+  tipoServicio     TipoServicio?     @relation(fields: [idTipoServicio], references: [idTipoServicio])
+  solicitudServicio SolicitudServicio? @relation("AsesoriaSolicitudServicio", fields: [idSolicitudServicio], references: [idSolicitudServicio], onDelete: SetNull, onUpdate: Cascade)
+  areaEspecialidad AreaEspecialidad? @relation(fields: [idAreaEspecialidad], references: [idAreaEspecialidad])
+  comentarioRef    Comentario?       @relation(fields: [idComentario], references: [idComentario])
+  notificacion     Notificacion?     @relation(fields: [idNotificacion], references: [idNotificacion])
+  mensajes          MensajeAsesoria[]
+  resenas          Resena[]
+
+  @@index([idUsuario])
+  @@index([idUsuarioSolicitante])
+  @@index([idUsuarioAsesor])
+  @@index([idTipoServicio])
+  @@index([idAreaEspecialidad])
+  @@index([idComentario])
+  @@index([idNotificacion])
+  @@map("asesorias")
+}
+
+model MensajeAsesoria {
+  idMensajeAsesoria Int      @id @default(autoincrement()) @map("id_mensaje_asesoria")
+  idAsesoria        Int      @map("id_asesoria")
+  idUsuarioRemitente Int     @map("id_usuario_remitente")
+  mensaje           String   @db.Text
+  leido             Boolean  @default(false)
+  fechaLectura      DateTime? @map("fecha_lectura")
+  fechaCreacion     DateTime @default(now()) @map("fecha_creacion")
+
+  asesoria  Asesoria @relation(fields: [idAsesoria], references: [idAsesoria], onDelete: Cascade, onUpdate: Cascade)
+  remitente Usuario  @relation("MensajesAsesoriaRemitente", fields: [idUsuarioRemitente], references: [idUsuario], onDelete: Cascade, onUpdate: Cascade)
+
+  @@index([idAsesoria, fechaCreacion], map: "idx_mensajes_asesoria_fecha")
+  @@index([idUsuarioRemitente], map: "idx_mensajes_asesoria_remitente")
+  @@map("mensajes_asesoria")
+}
+
+model Reporte {
+  idReporte       Int       @id @default(autoincrement()) @map("id_reporte")
+  idUsuario       Int?      @map("id_usuario")
+  tipoReporte     String?   @map("tipo_reporte") @db.VarChar(50)
+  fechaGeneracion DateTime? @default(now()) @map("fecha_generacion")
+  fechaInicio     DateTime? @map("fecha_inicio") @db.Date
+  fechaFin        DateTime? @map("fecha_fin") @db.Date
+  formato         String?   @db.VarChar(20)
+  descripcion     String?   @db.VarChar(500)
+  estado          String?   @default("Generado") @db.VarChar(20)
+
+  usuario Usuario? @relation(fields: [idUsuario], references: [idUsuario])
+
+  @@index([idUsuario])
+  @@map("reportes")
+}
+
+model Resena {
+  idResena              Int       @id @default(autoincrement()) @map("id_resena")
+  idUsuario             Int?      @map("id_usuario")
+  idAsesoria            Int?      @map("id_asesoria")
+  idSolicitudServicio   Int?      @map("id_solicitud_servicio")
+  calificacion          Int?
+  comentario            String?   @db.VarChar(500)
+  respuestaTecnico      String?   @map("respuesta_tecnico") @db.VarChar(500)
+  fechaResena           DateTime? @default(now()) @map("fecha_resena")
+  estado                String?   @default("Activa") @db.VarChar(20)
+
+  usuario            Usuario?            @relation(fields: [idUsuario], references: [idUsuario])
+  asesoria           Asesoria?           @relation(fields: [idAsesoria], references: [idAsesoria])
+  solicitudServicio  SolicitudServicio?  @relation(fields: [idSolicitudServicio], references: [idSolicitudServicio])
+
+  @@index([idUsuario])
+  @@index([idAsesoria])
+  @@index([idSolicitudServicio])
+  @@map("resenas")
+}
+
+model TipoNotificacion {
+  idTipoNotificacion     Int            @id @default(autoincrement()) @map("id_tipo_notificacion")
+  nombreTipoNotificacion String?        @unique @map("nombre_tipo_notificacion") @db.VarChar(50)
+  notificaciones         Notificacion[]
+
+  @@map("tipos_notificacion")
+}

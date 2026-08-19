@@ -1,0 +1,677 @@
+﻿{
+  "tableNames": [
+    "areas_especialidad",
+    "asesorias",
+    "ayudas",
+    "citas",
+    "comentarios",
+    "equipos",
+    "estados",
+    "estados_pago",
+    "medios_pago",
+    "notificaciones",
+    "pagos",
+    "prioridades",
+    "reportes",
+    "resenas",
+    "respuestas_comentarios",
+    "roles",
+    "solicitudes_servicio",
+    "tipos_documento",
+    "tipos_notificacion",
+    "tipos_servicio",
+    "ubicaciones_tecnicos",
+    "usuarios",
+    "verificaciones_pago",
+    "_prisma_migrations"
+  ],
+  "counts": {
+    "areas_especialidad": 4,
+    "asesorias": 0,
+    "ayudas": 0,
+    "citas": 16,
+    "comentarios": 5,
+    "equipos": 5,
+    "estados": 5,
+    "estados_pago": 5,
+    "medios_pago": 9,
+    "notificaciones": 91,
+    "pagos": 13,
+    "prioridades": 5,
+    "reportes": 0,
+    "resenas": 0,
+    "respuestas_comentarios": 5,
+    "roles": 5,
+    "solicitudes_servicio": 18,
+    "tipos_documento": 5,
+    "tipos_notificacion": 5,
+    "tipos_servicio": 5,
+    "ubicaciones_tecnicos": 5,
+    "usuarios": 10,
+    "verificaciones_pago": 5,
+    "_prisma_migrations": 3
+  },
+  "fks": [
+    {
+      "tableName": "asesorias",
+      "constraintName": "fk_asesorias_area_especialidad",
+      "columnName": "id_area_especialidad",
+      "referencedTableName": "areas_especialidad",
+      "referencedColumnName": "id_area_especialidad"
+    },
+    {
+      "tableName": "asesorias",
+      "constraintName": "fk_asesorias_comentario",
+      "columnName": "id_comentario",
+      "referencedTableName": "comentarios",
+      "referencedColumnName": "id_comentario"
+    },
+    {
+      "tableName": "asesorias",
+      "constraintName": "fk_asesorias_notificacion",
+      "columnName": "id_notificacion",
+      "referencedTableName": "notificaciones",
+      "referencedColumnName": "id_notificacion"
+    },
+    {
+      "tableName": "asesorias",
+      "constraintName": "fk_asesorias_usuario",
+      "columnName": "id_usuario",
+      "referencedTableName": "usuarios",
+      "referencedColumnName": "id_usuario"
+    },
+    {
+      "tableName": "citas",
+      "constraintName": "fk_citas_estado",
+      "columnName": "id_estado",
+      "referencedTableName": "estados",
+      "referencedColumnName": "id_estado"
+    },
+    {
+      "tableName": "citas",
+      "constraintName": "fk_citas_solicitud_servicio",
+      "columnName": "id_solicitud_servicio",
+      "referencedTableName": "solicitudes_servicio",
+      "referencedColumnName": "id_solicitud_servicio"
+    },
+    {
+      "tableName": "citas",
+      "constraintName": "fk_citas_usuario_cliente",
+      "columnName": "id_usuario_cliente",
+      "referencedTableName": "usuarios",
+      "referencedColumnName": "id_usuario"
+    },
+    {
+      "tableName": "citas",
+      "constraintName": "fk_citas_usuario_tecnico",
+      "columnName": "id_usuario_tecnico",
+      "referencedTableName": "usuarios",
+      "referencedColumnName": "id_usuario"
+    },
+    {
+      "tableName": "comentarios",
+      "constraintName": "fk_comentarios_cita",
+      "columnName": "id_cita",
+      "referencedTableName": "citas",
+      "referencedColumnName": "id_cita"
+    },
+    {
+      "tableName": "comentarios",
+      "constraintName": "fk_comentarios_usuario",
+      "columnName": "id_usuario",
+      "referencedTableName": "usuarios",
+      "referencedColumnName": "id_usuario"
+    },
+    {
+      "tableName": "equipos",
+      "constraintName": "fk_equipos_estado",
+      "columnName": "id_estado",
+      "referencedTableName": "estados",
+      "referencedColumnName": "id_estado"
+    },
+    {
+      "tableName": "equipos",
+      "constraintName": "fk_equipos_usuario",
+      "columnName": "id_usuario",
+      "referencedTableName": "usuarios",
+      "referencedColumnName": "id_usuario"
+    },
+    {
+      "tableName": "notificaciones",
+      "constraintName": "fk_notificaciones_tipo_notificacion",
+      "columnName": "id_tipo_notificacion",
+      "referencedTableName": "tipos_notificacion",
+      "referencedColumnName": "id_tipo_notificacion"
+    },
+    {
+      "tableName": "notificaciones",
+      "constraintName": "fk_notificaciones_usuario",
+      "columnName": "id_usuario",
+      "referencedTableName": "usuarios",
+      "referencedColumnName": "id_usuario"
+    },
+    {
+      "tableName": "pagos",
+      "constraintName": "fk_pagos_cita",
+      "columnName": "id_cita",
+      "referencedTableName": "citas",
+      "referencedColumnName": "id_cita"
+    },
+    {
+      "tableName": "pagos",
+      "constraintName": "fk_pagos_estado_pago",
+      "columnName": "id_estado_pago",
+      "referencedTableName": "estados_pago",
+      "referencedColumnName": "id_estado_pago"
+    },
+    {
+      "tableName": "pagos",
+      "constraintName": "fk_pagos_medio_pago",
+      "columnName": "id_medio_pago",
+      "referencedTableName": "medios_pago",
+      "referencedColumnName": "id_medio_pago"
+    },
+    {
+      "tableName": "pagos",
+      "constraintName": "fk_pagos_usuario",
+      "columnName": "id_usuario",
+      "referencedTableName": "usuarios",
+      "referencedColumnName": "id_usuario"
+    },
+    {
+      "tableName": "reportes",
+      "constraintName": "fk_reportes_usuario",
+      "columnName": "id_usuario",
+      "referencedTableName": "usuarios",
+      "referencedColumnName": "id_usuario"
+    },
+    {
+      "tableName": "resenas",
+      "constraintName": "fk_resenas_asesoria",
+      "columnName": "id_asesoria",
+      "referencedTableName": "asesorias",
+      "referencedColumnName": "id_asesoria"
+    },
+    {
+      "tableName": "resenas",
+      "constraintName": "fk_resenas_solicitud_servicio",
+      "columnName": "id_solicitud_servicio",
+      "referencedTableName": "solicitudes_servicio",
+      "referencedColumnName": "id_solicitud_servicio"
+    },
+    {
+      "tableName": "resenas",
+      "constraintName": "fk_resenas_usuario",
+      "columnName": "id_usuario",
+      "referencedTableName": "usuarios",
+      "referencedColumnName": "id_usuario"
+    },
+    {
+      "tableName": "respuestas_comentarios",
+      "constraintName": "fk_respuestas_comentarios_comentario",
+      "columnName": "id_comentario",
+      "referencedTableName": "comentarios",
+      "referencedColumnName": "id_comentario"
+    },
+    {
+      "tableName": "respuestas_comentarios",
+      "constraintName": "fk_respuestas_comentarios_usuario_respondedor",
+      "columnName": "id_usuario_respondedor",
+      "referencedTableName": "usuarios",
+      "referencedColumnName": "id_usuario"
+    },
+    {
+      "tableName": "solicitudes_servicio",
+      "constraintName": "fk_solicitudes_servicio_equipo",
+      "columnName": "id_equipo",
+      "referencedTableName": "equipos",
+      "referencedColumnName": "id_equipo"
+    },
+    {
+      "tableName": "solicitudes_servicio",
+      "constraintName": "fk_solicitudes_servicio_estado",
+      "columnName": "id_estado",
+      "referencedTableName": "estados",
+      "referencedColumnName": "id_estado"
+    },
+    {
+      "tableName": "solicitudes_servicio",
+      "constraintName": "fk_solicitudes_servicio_prioridad",
+      "columnName": "id_prioridad",
+      "referencedTableName": "prioridades",
+      "referencedColumnName": "id_prioridad"
+    },
+    {
+      "tableName": "solicitudes_servicio",
+      "constraintName": "fk_solicitudes_servicio_tipo_servicio",
+      "columnName": "id_tipo_servicio",
+      "referencedTableName": "tipos_servicio",
+      "referencedColumnName": "id_tipo_servicio"
+    },
+    {
+      "tableName": "solicitudes_servicio",
+      "constraintName": "fk_solicitudes_servicio_usuario",
+      "columnName": "id_usuario",
+      "referencedTableName": "usuarios",
+      "referencedColumnName": "id_usuario"
+    },
+    {
+      "tableName": "ubicaciones_tecnicos",
+      "constraintName": "fk_ubicaciones_tecnicos_usuario",
+      "columnName": "id_usuario",
+      "referencedTableName": "usuarios",
+      "referencedColumnName": "id_usuario"
+    },
+    {
+      "tableName": "usuarios",
+      "constraintName": "fk_usuarios_area_especialidad",
+      "columnName": "id_area_especialidad",
+      "referencedTableName": "areas_especialidad",
+      "referencedColumnName": "id_area_especialidad"
+    },
+    {
+      "tableName": "usuarios",
+      "constraintName": "fk_usuarios_rol",
+      "columnName": "id_rol",
+      "referencedTableName": "roles",
+      "referencedColumnName": "id_rol"
+    },
+    {
+      "tableName": "usuarios",
+      "constraintName": "fk_usuarios_tipo_documento",
+      "columnName": "id_tipo_documento",
+      "referencedTableName": "tipos_documento",
+      "referencedColumnName": "id_tipo_documento"
+    },
+    {
+      "tableName": "verificaciones_pago",
+      "constraintName": "fk_verificaciones_pago_medio_pago_tecnico",
+      "columnName": "id_medio_pago_tecnico",
+      "referencedTableName": "medios_pago",
+      "referencedColumnName": "id_medio_pago"
+    },
+    {
+      "tableName": "verificaciones_pago",
+      "constraintName": "fk_verificaciones_pago_pago",
+      "columnName": "id_pago",
+      "referencedTableName": "pagos",
+      "referencedColumnName": "id_pago"
+    },
+    {
+      "tableName": "verificaciones_pago",
+      "constraintName": "fk_verificaciones_pago_usuario_tecnico",
+      "columnName": "id_usuario_tecnico",
+      "referencedTableName": "usuarios",
+      "referencedColumnName": "id_usuario"
+    }
+  ],
+  "uniqueIndexes": [
+    {
+      "tableName": "areas_especialidad",
+      "indexName": "nombre_area",
+      "columnsList": "nombre_area_especialidad"
+    },
+    {
+      "tableName": "areas_especialidad",
+      "indexName": "PRIMARY",
+      "columnsList": "id_area_especialidad"
+    },
+    {
+      "tableName": "asesorias",
+      "indexName": "PRIMARY",
+      "columnsList": "id_asesoria"
+    },
+    {
+      "tableName": "ayudas",
+      "indexName": "PRIMARY",
+      "columnsList": "id_ayuda"
+    },
+    {
+      "tableName": "citas",
+      "indexName": "PRIMARY",
+      "columnsList": "id_cita"
+    },
+    {
+      "tableName": "citas",
+      "indexName": "uq_citas_id_solicitud_servicio",
+      "columnsList": "id_solicitud_servicio"
+    },
+    {
+      "tableName": "comentarios",
+      "indexName": "PRIMARY",
+      "columnsList": "id_comentario"
+    },
+    {
+      "tableName": "equipos",
+      "indexName": "numero_serie",
+      "columnsList": "numero_serie"
+    },
+    {
+      "tableName": "equipos",
+      "indexName": "PRIMARY",
+      "columnsList": "id_equipo"
+    },
+    {
+      "tableName": "estados",
+      "indexName": "nombre_estado",
+      "columnsList": "nombre_estado"
+    },
+    {
+      "tableName": "estados",
+      "indexName": "PRIMARY",
+      "columnsList": "id_estado"
+    },
+    {
+      "tableName": "estados_pago",
+      "indexName": "PRIMARY",
+      "columnsList": "id_estado_pago"
+    },
+    {
+      "tableName": "medios_pago",
+      "indexName": "nombre_medio",
+      "columnsList": "nombre_medio_pago"
+    },
+    {
+      "tableName": "medios_pago",
+      "indexName": "PRIMARY",
+      "columnsList": "id_medio_pago"
+    },
+    {
+      "tableName": "notificaciones",
+      "indexName": "PRIMARY",
+      "columnsList": "id_notificacion"
+    },
+    {
+      "tableName": "pagos",
+      "indexName": "PRIMARY",
+      "columnsList": "id_pago"
+    },
+    {
+      "tableName": "prioridades",
+      "indexName": "nombre_prioridad",
+      "columnsList": "nombre_prioridad"
+    },
+    {
+      "tableName": "prioridades",
+      "indexName": "PRIMARY",
+      "columnsList": "id_prioridad"
+    },
+    {
+      "tableName": "reportes",
+      "indexName": "PRIMARY",
+      "columnsList": "id_reporte"
+    },
+    {
+      "tableName": "resenas",
+      "indexName": "PRIMARY",
+      "columnsList": "id_resena"
+    },
+    {
+      "tableName": "respuestas_comentarios",
+      "indexName": "PRIMARY",
+      "columnsList": "id_respuesta"
+    },
+    {
+      "tableName": "roles",
+      "indexName": "nombre_rol",
+      "columnsList": "nombre_rol"
+    },
+    {
+      "tableName": "roles",
+      "indexName": "PRIMARY",
+      "columnsList": "id_rol"
+    },
+    {
+      "tableName": "solicitudes_servicio",
+      "indexName": "PRIMARY",
+      "columnsList": "id_solicitud_servicio"
+    },
+    {
+      "tableName": "tipos_documento",
+      "indexName": "nombre_tipo",
+      "columnsList": "nombre_tipo_documento"
+    },
+    {
+      "tableName": "tipos_documento",
+      "indexName": "PRIMARY",
+      "columnsList": "id_tipo_documento"
+    },
+    {
+      "tableName": "tipos_documento",
+      "indexName": "tipo_abreviado",
+      "columnsList": "abreviatura_tipo_documento"
+    },
+    {
+      "tableName": "tipos_notificacion",
+      "indexName": "nombre_tipo",
+      "columnsList": "nombre_tipo_notificacion"
+    },
+    {
+      "tableName": "tipos_notificacion",
+      "indexName": "PRIMARY",
+      "columnsList": "id_tipo_notificacion"
+    },
+    {
+      "tableName": "tipos_servicio",
+      "indexName": "PRIMARY",
+      "columnsList": "id_tipo_servicio"
+    },
+    {
+      "tableName": "ubicaciones_tecnicos",
+      "indexName": "PRIMARY",
+      "columnsList": "id_ubicacion_tecnico"
+    },
+    {
+      "tableName": "usuarios",
+      "indexName": "correo",
+      "columnsList": "correo"
+    },
+    {
+      "tableName": "usuarios",
+      "indexName": "PRIMARY",
+      "columnsList": "id_usuario"
+    },
+    {
+      "tableName": "verificaciones_pago",
+      "indexName": "PRIMARY",
+      "columnsList": "id_verificacion_pago"
+    },
+    {
+      "tableName": "verificaciones_pago",
+      "indexName": "uq_verificaciones_pago_id_pago",
+      "columnsList": "id_pago"
+    },
+    {
+      "tableName": "_prisma_migrations",
+      "indexName": "PRIMARY",
+      "columnsList": "id"
+    }
+  ],
+  "catalogs": {
+    "roles": [
+      {
+        "idRol": 1,
+        "nombreRol": "Administrador"
+      },
+      {
+        "idRol": 2,
+        "nombreRol": "Técnico"
+      },
+      {
+        "idRol": 3,
+        "nombreRol": "Cliente"
+      },
+      {
+        "idRol": 4,
+        "nombreRol": "Soporte"
+      },
+      {
+        "idRol": 5,
+        "nombreRol": "Visitante"
+      }
+    ],
+    "estados": [
+      {
+        "idEstado": 1,
+        "nombreEstado": "Activo"
+      },
+      {
+        "idEstado": 2,
+        "nombreEstado": "Pendiente"
+      },
+      {
+        "idEstado": 3,
+        "nombreEstado": "En Progreso"
+      },
+      {
+        "idEstado": 4,
+        "nombreEstado": "Finalizado"
+      },
+      {
+        "idEstado": 5,
+        "nombreEstado": "Cancelado"
+      }
+    ],
+    "estadosPago": [
+      {
+        "idEstadoPago": 1,
+        "nombreEstadoPago": "Pendiente de Pago",
+        "descripcion": "Esperando confirmación de la transacción."
+      },
+      {
+        "idEstadoPago": 2,
+        "nombreEstadoPago": "Pagado",
+        "descripcion": "El pago se ha completado exitosamente."
+      },
+      {
+        "idEstadoPago": 3,
+        "nombreEstadoPago": "Fallido",
+        "descripcion": "La transacción de pago no se pudo completar."
+      },
+      {
+        "idEstadoPago": 4,
+        "nombreEstadoPago": "Reembolsado",
+        "descripcion": "El monto total del pago fue devuelto."
+      },
+      {
+        "idEstadoPago": 5,
+        "nombreEstadoPago": "En Revisión",
+        "descripcion": "El pago está siendo verificado manualmente."
+      }
+    ],
+    "mediosPago": [
+      {
+        "idMedioPago": 1,
+        "nombreMedioPago": "Tarjeta de Crédito"
+      },
+      {
+        "idMedioPago": 2,
+        "nombreMedioPago": "Transferencia Bancaria"
+      },
+      {
+        "idMedioPago": 3,
+        "nombreMedioPago": "Pago en Efectivo"
+      },
+      {
+        "idMedioPago": 4,
+        "nombreMedioPago": "PayPal"
+      },
+      {
+        "idMedioPago": 5,
+        "nombreMedioPago": "Criptomonedas"
+      },
+      {
+        "idMedioPago": 6,
+        "nombreMedioPago": "Nequi"
+      },
+      {
+        "idMedioPago": 7,
+        "nombreMedioPago": "DaviPlata"
+      },
+      {
+        "idMedioPago": 8,
+        "nombreMedioPago": "Bancolombia"
+      },
+      {
+        "idMedioPago": 9,
+        "nombreMedioPago": "Tarjeta"
+      }
+    ],
+    "prioridades": [
+      {
+        "idPrioridad": 1,
+        "nombrePrioridad": "Baja"
+      },
+      {
+        "idPrioridad": 2,
+        "nombrePrioridad": "Media"
+      },
+      {
+        "idPrioridad": 3,
+        "nombrePrioridad": "Alta"
+      },
+      {
+        "idPrioridad": 4,
+        "nombrePrioridad": "Urgente"
+      },
+      {
+        "idPrioridad": 5,
+        "nombrePrioridad": "Crítica"
+      }
+    ],
+    "tiposNotificacion": [
+      {
+        "idTipoNotificacion": 1,
+        "nombreTipoNotificacion": "Solicitud Creada"
+      },
+      {
+        "idTipoNotificacion": 2,
+        "nombreTipoNotificacion": "Cita Confirmada"
+      },
+      {
+        "idTipoNotificacion": 3,
+        "nombreTipoNotificacion": "Pago Recibido"
+      },
+      {
+        "idTipoNotificacion": 4,
+        "nombreTipoNotificacion": "Recordatorio de Cita"
+      },
+      {
+        "idTipoNotificacion": 5,
+        "nombreTipoNotificacion": "Comentario Nuevo"
+      }
+    ],
+    "tiposServicio": [
+      {
+        "idTipoServicio": 1,
+        "nombreServicio": "Mantenimiento Preventivo PC",
+        "descripcionServicio": "Limpieza interna, optimización de software.",
+        "costo": "45"
+      },
+      {
+        "idTipoServicio": 2,
+        "nombreServicio": "Instalación de SO",
+        "descripcionServicio": "Formateo e instalación de Windows/Linux.",
+        "costo": "75"
+      },
+      {
+        "idTipoServicio": 3,
+        "nombreServicio": "Revisión de Red Doméstica",
+        "descripcionServicio": "Diagnóstico y configuración de router/Wi-Fi.",
+        "costo": "50"
+      },
+      {
+        "idTipoServicio": 4,
+        "nombreServicio": "Reparación de Pantalla Móvil",
+        "descripcionServicio": "Reemplazo de pantalla en smartphone o tablet.",
+        "costo": "120"
+      },
+      {
+        "idTipoServicio": 5,
+        "nombreServicio": "Asistencia Remota",
+        "descripcionServicio": "Soporte técnico por internet para problemas leves.",
+        "costo": "30"
+      }
+    ]
+  }
+}

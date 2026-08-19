@@ -1,0 +1,592 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>FuturApp - Documentacion Tecnica Para Exposicion</title>
+  <style>
+    body { font-family: Calibri, Arial, sans-serif; color: #1f2937; line-height: 1.35; }
+    h1 { color: #1f4e79; font-size: 26px; border-bottom: 1px solid #d1d5db; padding-bottom: 6px; }
+    h2 { color: #2f5597; font-size: 20px; margin-top: 24px; }
+    h3 { color: #374151; font-size: 16px; margin-top: 18px; }
+    table { border-collapse: collapse; width: 100%; margin: 10px 0 18px; }
+    th, td { border: 1px solid #9ca3af; padding: 7px; vertical-align: top; }
+    th { background: #e5edf7; color: #1f4e79; }
+    code, pre { font-family: Consolas, monospace; font-size: 11px; }
+    pre { background: #f3f4f6; border: 1px solid #d1d5db; padding: 10px; white-space: pre-wrap; }
+    .note { background: #eef6ff; border-left: 4px solid #2f5597; padding: 10px; }
+  </style>
+</head>
+<body>
+  <h1>FuturApp - Documentacion Tecnica Para Exposicion</h1>
+  <p><strong>Ruta del proyecto analizado:</strong> <code>c:\Users\danag\futurapp_1</code></p>
+  <p><strong>Fecha de referencia:</strong> 16 de junio de 2026</p>
+  <p>Documento generado para explicar la arquitectura, modulos, tecnologias, flujo y codigo principal del proyecto actual.</p>
+
+  <h1>1. Resumen general del proyecto</h1>
+  <p>FuturApp es una aplicacion full stack para gestionar servicios tecnicos, citas, pagos, usuarios, notificaciones, comentarios y asesorias. El sistema tiene un frontend en React con Vite y un backend en Node.js con Express, conectado a MySQL/MariaDB mediante Prisma ORM.</p>
+  <p>La aplicacion funciona como un panel operativo con roles diferenciados:</p>
+  <ul>
+    <li><strong>admin:</strong> administra usuarios, servicios, citas, pagos e informes.</li>
+    <li><strong>usuario:</strong> solicita servicios, paga, consulta citas, notificaciones y asesorias.</li>
+    <li><strong>tecnico:</strong> ve servicios/citas asignadas y confirma pagos.</li>
+    <li><strong>asesor:</strong> consulta asesorias asignadas y comentarios relacionados.</li>
+  </ul>
+
+  <h1>2. Tecnologias utilizadas</h1>
+  <table>
+    <tr><th>Area</th><th>Tecnologia</th><th>Funcion dentro del proyecto</th></tr>
+    <tr><td>Frontend</td><td>React 19</td><td>Construccion de interfaces por componentes.</td></tr>
+    <tr><td>Frontend</td><td>Vite</td><td>Servidor de desarrollo y build del frontend.</td></tr>
+    <tr><td>Backend</td><td>Node.js</td><td>Ejecucion del servidor.</td></tr>
+    <tr><td>Backend</td><td>Express 5</td><td>API REST modular.</td></tr>
+    <tr><td>Base de datos</td><td>MySQL/MariaDB</td><td>Persistencia principal.</td></tr>
+    <tr><td>ORM</td><td>Prisma</td><td>Modelado y acceso a datos.</td></tr>
+    <tr><td>Autenticacion</td><td>JWT</td><td>Sesiones autenticadas por token.</td></tr>
+    <tr><td>Seguridad</td><td>bcryptjs</td><td>Hash de contrasenas.</td></tr>
+    <tr><td>Estilos</td><td>CSS-in-JS manual</td><td>Variables globales y estilos inline/componentizados.</td></tr>
+    <tr><td>HTTP</td><td>fetch</td><td>Cliente API desde frontend.</td></tr>
+    <tr><td>Desarrollo</td><td>ESLint / Nodemon</td><td>Calidad de codigo y recarga del servidor.</td></tr>
+  </table>
+
+  <h1>3. Arquitectura general</h1>
+  <p>El proyecto esta separado en dos capas principales:</p>
+  <pre>futurapp_1/
+|- src/       Frontend React + Vite
+|- server/    Backend Express + Prisma</pre>
+  <p>El flujo general es:</p>
+  <ol>
+    <li>El usuario inicia sesion desde React.</li>
+    <li>React consume <code>/api/auth/login</code>.</li>
+    <li>El backend valida con Prisma y bcrypt.</li>
+    <li>El backend genera un JWT.</li>
+    <li>El frontend guarda el token.</li>
+    <li>Cada peticion usa <code>Authorization: Bearer &lt;token&gt;</code>.</li>
+    <li>Express valida el token con <code>verifyToken</code>.</li>
+    <li>Los servicios aplican permisos por rol.</li>
+    <li>Prisma consulta MySQL.</li>
+  </ol>
+  <p>Las rutas visibles del frontend se controlan por rol en <code>src/app/router/appRoutes.jsx</code>.</p>
+
+  <h1>4. Estructura general de carpetas</h1>
+  <pre>futurapp_1/
+|- src/
+|  |- app/
+|  |  |- config/
+|  |  |- layouts/
+|  |  |- providers/
+|  |  |- router/
+|  |- components/
+|  |  |- ui/
+|  |  |- modals/
+|  |  |- tables/
+|  |  |- cards/
+|  |- domains/
+|  |  |- auth/
+|  |  |- users/
+|  |  |- services/
+|  |  |- appointments/
+|  |  |- payments/
+|  |  |- notifications/
+|  |  |- advisories/
+|  |  |- comments/
+|  |  |- location/
+|  |  |- maps/
+|  |  |- reports/
+|  |- infrastructure/
+|  |  |- http/
+|  |  |- api/
+|  |  |- storage/
+|  |  |- database/
+|  |  |- realtime/
+|  |- pages/
+|  |- shared/
+|  |- styles/
+|  |- main.jsx
+|- server/
+|  |- prisma/
+|  |  |- schema.prisma
+|  |- src/
+|  |  |- config/
+|  |  |- middlewares/
+|  |  |- modules/
+|  |  |- routes/
+|  |  |- app.js
+|  |  |- server.js
+|- database/
+|- docs/
+|- package.json</pre>
+  <table>
+    <tr><th>Carpeta</th><th>Funcion</th></tr>
+    <tr><td><code>src/app</code></td><td>Configuracion del frontend, layout principal, provider de estado y router.</td></tr>
+    <tr><td><code>src/components</code></td><td>Componentes reutilizables como botones, modales, tablas y tarjetas.</td></tr>
+    <tr><td><code>src/domains</code></td><td>Organizacion del frontend por dominio funcional.</td></tr>
+    <tr><td><code>src/infrastructure</code></td><td>Cliente HTTP, storage local, APIs auxiliares y codigo legacy.</td></tr>
+    <tr><td><code>src/pages</code></td><td>Pantallas principales visibles para los usuarios.</td></tr>
+    <tr><td><code>server/src/modules</code></td><td>Modulos backend con rutas, controladores, servicios y mappers.</td></tr>
+    <tr><td><code>server/prisma</code></td><td>Schema de Prisma y scripts relacionados con la base de datos.</td></tr>
+    <tr><td><code>database</code></td><td>Migraciones manuales y backups SQL.</td></tr>
+    <tr><td><code>docs</code></td><td>Documentacion tecnica del proyecto.</td></tr>
+  </table>
+
+  <h1>5. Documentacion del frontend</h1>
+
+  <h2>Modulo: Entrada principal</h2>
+  <p><strong>Ubicacion:</strong> <code>src/main.jsx</code> y <code>src/App.jsx</code>.</p>
+  <p><strong>Responsabilidad:</strong> monta React, restaura sesion, decide si mostrar login o panel, carga contador de notificaciones y renderiza la ruta activa.</p>
+  <pre>createRoot(document.getElementById('root')).render(
+  &lt;StrictMode&gt;
+    &lt;App /&gt;
+  &lt;/StrictMode&gt;,
+)</pre>
+  <pre>const response = await authApi.me();
+setSession(normalizeAuthUser(response.user));</pre>
+  <p><strong>Explicacion para exposicion:</strong> En el archivo principal se monta la aplicacion React. Luego <code>App.jsx</code> restaura la sesion con el token, carga las rutas segun el rol y muestra el layout principal si el usuario esta autenticado.</p>
+
+  <h2>Modulo: Router y roles</h2>
+  <p><strong>Ubicacion:</strong> <code>src/app/router/appRoutes.jsx</code>.</p>
+  <p><strong>Responsabilidad:</strong> define vistas, iconos y roles permitidos.</p>
+  <pre>export const appRoutes = [
+  { id: "dashboard", label: "Inicio", icon: "home", roles: ALL_ROLES, Component: Dashboard },
+  { id: "usuarios", label: "Usuarios", icon: "users", roles: ["admin"], Component: UsersRoute },
+  { id: "servicios", label: "Servicios", icon: "tool", roles: OPERATIVE_ROLES, Component: ServicesRoute },
+  { id: "asesoria", label: "Asesoria", icon: "chat", roles: ["usuario"], Component: UsuarioAsesoriaPage },
+];</pre>
+  <p><strong>Explicacion:</strong> Aqui se define que pantallas puede ver cada rol. Por ejemplo, usuarios ven la ruta de asesoria, administradores ven usuarios e informes, y asesores ven sus asesorias.</p>
+
+  <h2>Modulo: Cliente HTTP</h2>
+  <p><strong>Ubicacion:</strong> <code>src/infrastructure/http/httpClient.js</code>.</p>
+  <p><strong>Responsabilidad:</strong> centraliza llamadas HTTP y agrega el JWT.</p>
+  <pre>const token = authTokenStorage.getToken();
+
+headers: {
+  "Content-Type": "application/json",
+  ...(token ? { Authorization: `Bearer ${token}` } : {}),
+}</pre>
+  <p><strong>Explicacion:</strong> Todas las llamadas al backend pasan por este cliente. Si existe un token, se agrega automaticamente al header Authorization.</p>
+
+  <h2>Modulo: Layout principal</h2>
+  <p><strong>Ubicacion:</strong> <code>src/app/layouts/AppShell.jsx</code>.</p>
+  <p><strong>Responsabilidad:</strong> sidebar, navegacion por rol, badge de notificaciones y cierre de sesion.</p>
+  <pre>{item.id === "notificaciones" && unread &gt; 0 && (
+  &lt;span&gt;{unread}&lt;/span&gt;
+)}</pre>
+
+  <h2>Modulo: Autenticacion frontend</h2>
+  <p><strong>Ubicacion:</strong> <code>src/domains/auth/</code>.</p>
+  <table>
+    <tr><th>Archivo</th><th>Funcion</th></tr>
+    <tr><td><code>authApi.js</code></td><td>Consume <code>/auth/login</code>, <code>/auth/register</code>, <code>/auth/me</code> y <code>/auth/logout</code>.</td></tr>
+    <tr><td><code>authTokenStorage.js</code></td><td>Guarda y limpia el token.</td></tr>
+    <tr><td><code>authService.js</code></td><td>Normaliza usuario autenticado.</td></tr>
+    <tr><td><code>AuthRoute.jsx</code></td><td>Renderiza pantalla de autenticacion.</td></tr>
+  </table>
+
+  <h2>Modulo: Servicios</h2>
+  <p><strong>Ubicacion:</strong> <code>src/pages/ServiciosPage.jsx</code> y <code>src/domains/services/</code>.</p>
+  <table>
+    <tr><th>Archivo</th><th>Funcion</th></tr>
+    <tr><td><code>ServiciosPage.jsx</code></td><td>Vista de servicios.</td></tr>
+    <tr><td><code>servicesApi.js</code></td><td>Consume endpoints de servicios.</td></tr>
+    <tr><td><code>serviceMappers.js</code></td><td>Normaliza datos recibidos.</td></tr>
+    <tr><td><code>servicesModel.js</code></td><td>Estados validos.</td></tr>
+  </table>
+  <pre>await servicesApi.createService({ description: form.descripcion });
+await servicesApi.updateService(id, { status: estado });
+await servicesApi.cancelService(id);</pre>
+  <p><strong>Explicacion:</strong> En servicios se listan solicitudes segun el rol. El usuario crea solicitudes, el administrador puede asignar tecnico, cambiar estado y definir monto.</p>
+
+  <h2>Modulo: Citas</h2>
+  <p><strong>Ubicacion:</strong> <code>src/pages/CitasPage.jsx</code> y <code>src/domains/appointments/</code>.</p>
+  <table>
+    <tr><th>Archivo</th><th>Funcion</th></tr>
+    <tr><td><code>CitasPage.jsx</code></td><td>Vista de citas.</td></tr>
+    <tr><td><code>appointmentsApi.js</code></td><td>Agenda y actualiza citas.</td></tr>
+    <tr><td><code>appointmentMappers.js</code></td><td>Normaliza fecha, hora y estado.</td></tr>
+  </table>
+  <pre>getAppointments: () =&gt; httpClient.get("/appointments")
+scheduleAppointment: (id, payload) =&gt; httpClient.patch(`/appointments/${id}/schedule`, payload)</pre>
+
+  <h2>Modulo: Pagos</h2>
+  <p><strong>Ubicacion:</strong> <code>src/pages/PagosPage.jsx</code> y <code>src/domains/payments/</code>.</p>
+  <table>
+    <tr><th>Archivo</th><th>Funcion</th></tr>
+    <tr><td><code>PagosPage.jsx</code></td><td>Vista de pagos por rol.</td></tr>
+    <tr><td><code>paymentsApi.js</code></td><td>Iniciar pago y confirmacion tecnica.</td></tr>
+    <tr><td><code>paymentMappers.js</code></td><td>Normaliza pagos.</td></tr>
+    <tr><td><code>paymentsModel.js</code></td><td>Estados, medios y metricas.</td></tr>
+  </table>
+  <pre>await paymentsApi.initiatePayment(target.id, { method: modalMethod });
+await paymentsApi.confirmTechnicianPayment(target.id, { method });</pre>
+
+  <h2>Modulo: Notificaciones</h2>
+  <p><strong>Ubicacion:</strong> <code>src/pages/NotificacionesPage.jsx</code>.</p>
+  <p><strong>Responsabilidad:</strong> lista personal de notificaciones, marcar una o todas como leidas.</p>
+  <pre>const response = await notificationsApi.getNotifications();
+await notificationsApi.markAsRead(id);
+await notificationsApi.markAllAsRead();</pre>
+  <p><strong>Explicacion:</strong> La pagina de notificaciones no filtra por rol localmente. Consume la bandeja personal desde backend y actualiza el contador despues de marcar lecturas.</p>
+
+  <h2>Modulo: Asesorias</h2>
+  <p><strong>Ubicacion:</strong> <code>src/pages/UsuarioAsesoriaPage.jsx</code>, <code>src/pages/AsesoriasPage.jsx</code> y <code>src/domains/advisories/</code>.</p>
+  <p><strong>Responsabilidad:</strong> usuario crea solicitud de asesoria; asesor consulta asesorias asignadas.</p>
+  <pre>await advisoriesApi.createAdvisoryRequest({
+  descripcionInicial: form.descripcionInicial.trim(),
+  tipoDispositivo: form.tipoDispositivo,
+  fechaContacto: form.fechaContacto,
+  horaContacto: form.horaContacto,
+  telefonoPrincipal: form.telefonoPrincipal,
+  telefonoAlterno: form.telefonoAlterno,
+});</pre>
+  <p><strong>Estado actual:</strong> modulo funcional para crear solicitudes desde usuario y listar asesorias de usuario/asesor. Comentarios de asesoria todavia reportan relacion no funcional.</p>
+
+  <h2>Modulo: Componentes reutilizables</h2>
+  <p><strong>Ubicacion:</strong> <code>src/components/</code>.</p>
+  <table>
+    <tr><th>Carpeta</th><th>Funcion</th></tr>
+    <tr><td><code>ui/</code></td><td>Botones, badges, campos, iconos y toast.</td></tr>
+    <tr><td><code>modals/</code></td><td>Ventanas modales.</td></tr>
+    <tr><td><code>tables/</code></td><td>Tablas reutilizables.</td></tr>
+    <tr><td><code>cards/</code></td><td>Tarjetas estadisticas.</td></tr>
+  </table>
+  <pre>export const BtnPrimary = ({ onClick, children, icon, danger, small }) =&gt; (
+  &lt;button className="btn-primary" onClick={onClick}&gt;
+    {icon && &lt;Ic n={icon} /&gt;}{children}
+  &lt;/button&gt;
+);</pre>
+
+  <h1>6. Documentacion del backend</h1>
+
+  <h2>Entrada backend</h2>
+  <p><strong>Ubicacion:</strong> <code>server/src/app.js</code> y <code>server/src/server.js</code>.</p>
+  <pre>app.use(cors({ origin: env.clientUrl, credentials: true }));
+app.use(express.json());
+app.use("/api", routes);</pre>
+  <pre>const server = app.listen(PORT, () =&gt; {
+  console.log(`FuturApp API running on http://localhost:${PORT}`);
+});</pre>
+
+  <h2>Rutas globales</h2>
+  <p><strong>Ubicacion:</strong> <code>server/src/routes/index.js</code>.</p>
+  <pre>router.use("/auth", authRoutes);
+router.use("/users", usersRoutes);
+router.use("/services", servicesRoutes);
+router.use("/appointments", appointmentsRoutes);
+router.use("/payments", paymentsRoutes);
+router.use("/notifications", notificationsRoutes);
+router.use("/comments", commentsRoutes);
+router.use("/locations", locationsRoutes);
+router.use("/advisories", advisoriesRoutes);</pre>
+
+  <h2>Modulo: Auth</h2>
+  <p><strong>Ubicacion:</strong> <code>server/src/modules/auth/</code>.</p>
+  <table>
+    <tr><th>Metodo</th><th>Ruta</th><th>Funcion</th></tr>
+    <tr><td>GET</td><td><code>/api/auth</code></td><td>Estado del modulo.</td></tr>
+    <tr><td>POST</td><td><code>/api/auth/register</code></td><td>Registro publico de usuario.</td></tr>
+    <tr><td>POST</td><td><code>/api/auth/login</code></td><td>Login.</td></tr>
+    <tr><td>GET</td><td><code>/api/auth/me</code></td><td>Usuario autenticado.</td></tr>
+    <tr><td>POST</td><td><code>/api/auth/logout</code></td><td>Logout logico.</td></tr>
+  </table>
+  <pre>const passwordMatches = user?.contrasenaHash
+  ? await bcrypt.compare(password, user.contrasenaHash)
+  : false;
+
+return {
+  token: signToken(user),
+  user: sanitizeUser(user),
+};</pre>
+
+  <h2>Modulo: Users</h2>
+  <p><strong>Ubicacion:</strong> <code>server/src/modules/users/</code>.</p>
+  <table>
+    <tr><th>Metodo</th><th>Ruta</th><th>Funcion</th></tr>
+    <tr><td>GET</td><td><code>/api/users</code></td><td>Admin lista usuarios.</td></tr>
+    <tr><td>GET</td><td><code>/api/users/technicians</code></td><td>Admin lista tecnicos activos.</td></tr>
+    <tr><td>GET</td><td><code>/api/users/catalogs</code></td><td>Roles y areas.</td></tr>
+    <tr><td>GET</td><td><code>/api/users/me</code></td><td>Perfil propio.</td></tr>
+    <tr><td>PATCH</td><td><code>/api/users/me</code></td><td>Actualizar perfil.</td></tr>
+    <tr><td>PATCH</td><td><code>/api/users/:id/admin</code></td><td>Admin cambia rol/estado.</td></tr>
+  </table>
+  <p>Reglas relevantes: solo admin administra usuarios; no puede desactivar/degradar su propia cuenta admin; no puede dejar el sistema sin admin activo; tecnico con citas activas no puede dejar de ser asignable.</p>
+
+  <h2>Modulo: Services</h2>
+  <p><strong>Ubicacion:</strong> <code>server/src/modules/services/</code>.</p>
+  <table>
+    <tr><th>Metodo</th><th>Ruta</th><th>Funcion</th></tr>
+    <tr><td>GET</td><td><code>/api/services</code></td><td>Lista servicios por rol.</td></tr>
+    <tr><td>POST</td><td><code>/api/services</code></td><td>Crea solicitud.</td></tr>
+    <tr><td>PATCH</td><td><code>/api/services/:id</code></td><td>Actualiza servicio/asignacion.</td></tr>
+    <tr><td>PATCH</td><td><code>/api/services/:id/cancel</code></td><td>Cancela solicitud.</td></tr>
+  </table>
+  <pre>const where = isAdmin(authUser)
+  ? {}
+  : isTechnician(authUser)
+    ? { citas: { some: { idUsuarioTecnico: authUser.id } } }
+    : { idUsuario: authUser.id };</pre>
+
+  <h2>Modulo: Appointments</h2>
+  <p><strong>Ubicacion:</strong> <code>server/src/modules/appointments/</code>.</p>
+  <table>
+    <tr><th>Metodo</th><th>Ruta</th><th>Funcion</th></tr>
+    <tr><td>GET</td><td><code>/api/appointments</code></td><td>Lista citas por rol.</td></tr>
+    <tr><td>PATCH</td><td><code>/api/appointments/:id/schedule</code></td><td>Admin programa cita.</td></tr>
+    <tr><td>PATCH</td><td><code>/api/appointments/:id/status</code></td><td>Admin cambia estado.</td></tr>
+  </table>
+  <pre>assertAllowed(isAdmin(authUser), "Solo admin puede programar citas.");</pre>
+
+  <h2>Modulo: Payments</h2>
+  <p><strong>Ubicacion:</strong> <code>server/src/modules/payments/</code>.</p>
+  <table>
+    <tr><th>Metodo</th><th>Ruta</th><th>Funcion</th></tr>
+    <tr><td>GET</td><td><code>/api/payments</code></td><td>Lista pagos.</td></tr>
+    <tr><td>GET</td><td><code>/api/payments/summary</code></td><td>Resumen.</td></tr>
+    <tr><td>GET</td><td><code>/api/payments/:id</code></td><td>Detalle.</td></tr>
+    <tr><td>POST</td><td><code>/api/payments/:id/initiate</code></td><td>Usuario inicia pago.</td></tr>
+    <tr><td>POST</td><td><code>/api/payments/:id/confirm-technician</code></td><td>Tecnico confirma pago.</td></tr>
+  </table>
+  <pre>if (!methodsMatch && nextAttempts &lt; TECHNICIAN_MISMATCH_ATTEMPTS_BEFORE_OBSERVATION) {
+  throw createDetailedError("El metodo indicado no coincide...", 409, {
+    code: "PAYMENT_METHOD_MISMATCH",
+  });
+}</pre>
+
+  <h2>Modulo: Notifications</h2>
+  <p><strong>Ubicacion:</strong> <code>server/src/modules/notifications/</code>.</p>
+  <table>
+    <tr><th>Metodo</th><th>Ruta</th><th>Funcion</th></tr>
+    <tr><td>GET</td><td><code>/api/notifications</code></td><td>Bandeja personal.</td></tr>
+    <tr><td>GET</td><td><code>/api/notifications/unread-count</code></td><td>Contador personal.</td></tr>
+    <tr><td>POST</td><td><code>/api/notifications</code></td><td>Crear notificacion.</td></tr>
+    <tr><td>PATCH</td><td><code>/api/notifications/read-all</code></td><td>Marcar propias como leidas.</td></tr>
+    <tr><td>PATCH</td><td><code>/api/notifications/:id/read</code></td><td>Marcar una propia.</td></tr>
+  </table>
+  <pre>where: { idUsuario: authUser.id }</pre>
+  <pre>export async function notificarAdministradores({
+  tipo = "sistema",
+  titulo,
+  mensaje,
+  referenciaTipo = null,
+  referenciaId = null,
+  evento = "alerta_administrativa",
+})</pre>
+
+  <h2>Modulo: Advisories</h2>
+  <p><strong>Ubicacion:</strong> <code>server/src/modules/advisories/</code>.</p>
+  <table>
+    <tr><th>Metodo</th><th>Ruta</th><th>Funcion</th></tr>
+    <tr><td>GET</td><td><code>/api/advisories</code></td><td>Usuario ve propias / asesor ve asignadas.</td></tr>
+    <tr><td>POST</td><td><code>/api/advisories</code></td><td>Usuario crea solicitud.</td></tr>
+    <tr><td>GET</td><td><code>/api/advisories/:id</code></td><td>Detalle propio/asignado.</td></tr>
+    <tr><td>GET</td><td><code>/api/advisories/:id/comments</code></td><td>Comentarios, actualmente sin relacion funcional.</td></tr>
+  </table>
+  <pre>where: authUser.role === "asesor"
+  ? { idUsuarioAsesor: authUser.id }
+  : { idUsuarioSolicitante: authUser.id },</pre>
+
+  <h2>Modulo: Comments</h2>
+  <p><strong>Ubicacion:</strong> <code>server/src/modules/comments/</code>. Endpoint <code>GET /api/comments</code>. Lista comentarios visibles por rol. Estado: solo lectura.</p>
+
+  <h2>Modulo: Locations</h2>
+  <p><strong>Ubicacion:</strong> <code>server/src/modules/locations/</code>. Endpoint <code>GET /api/locations</code>. Backend disponible para listar ubicacion de tecnicos segun rol.</p>
+
+  <h1>7. Documentacion de la base de datos</h1>
+  <p><strong>Archivo:</strong> <code>server/prisma/schema.prisma</code>.</p>
+  <p>La base usa modelos y tablas en espanol. Prisma usa <code>@map</code> para conectar nombres JavaScript/camelCase con columnas reales snake_case de MySQL.</p>
+  <table>
+    <tr><th>Modelo</th><th>Funcion</th><th>Campos principales</th><th>Relaciones</th></tr>
+    <tr><td>Usuario</td><td>Almacena usuarios del sistema.</td><td><code>idUsuario</code>, <code>correo</code>, <code>contrasenaHash</code>, <code>idRol</code>, <code>activo</code>.</td><td>Rol, citas, pagos, notificaciones, servicios, comentarios, asesorias.</td></tr>
+    <tr><td>Rol</td><td>Catalogo de roles.</td><td><code>idRol</code>, <code>nombreRol</code>.</td><td>Usuarios.</td></tr>
+    <tr><td>SolicitudServicio</td><td>Solicitud tecnica creada por usuario/admin.</td><td><code>idSolicitudServicio</code>, <code>idUsuario</code>, <code>idTipoServicio</code>, <code>descripcionProblema</code>, <code>idPrioridad</code>, <code>idEstado</code>.</td><td>Usuario, equipo, tipo, prioridad, estado, citas, resenas.</td></tr>
+    <tr><td>Cita</td><td>Agenda de atencion tecnica.</td><td><code>idCita</code>, <code>idSolicitudServicio</code>, <code>idUsuarioCliente</code>, <code>idUsuarioTecnico</code>, <code>fecha</code>, <code>hora</code>.</td><td>Solicitud, cliente, tecnico, pagos, comentarios.</td></tr>
+    <tr><td>Pago</td><td>Pagos asociados a citas.</td><td><code>idPago</code>, <code>idCita</code>, <code>idMedioPago</code>, <code>idEstadoPago</code>, <code>monto</code>.</td><td>Cita, medio, estado, usuario, verificacion.</td></tr>
+    <tr><td>VerificacionPago</td><td>Validacion tecnica del pago.</td><td><code>cantidadIntentos</code>, <code>metodosCoinciden</code>, <code>requiereRevision</code>.</td><td>Pago, tecnico, medio de pago.</td></tr>
+    <tr><td>Notificacion</td><td>Bandeja personal por usuario.</td><td><code>idNotificacion</code>, <code>idUsuario</code>, <code>titulo</code>, <code>mensaje</code>, <code>leida</code>.</td><td>Usuario, tipo notificacion.</td></tr>
+    <tr><td>Comentario</td><td>Comentarios asociados a citas.</td><td><code>idComentario</code>, <code>idCita</code>, <code>idUsuario</code>.</td><td>Cita, usuario, respuestas.</td></tr>
+    <tr><td>Asesoria</td><td>Solicitudes y gestion de asesorias.</td><td><code>idAsesoria</code>, <code>idUsuarioSolicitante</code>, <code>idUsuarioAsesor</code>, <code>estado</code>, <code>descripcion</code>, <code>tipoDispositivo</code>.</td><td>Solicitante, asesor, tipo servicio, comentario, notificacion, resenas.</td></tr>
+    <tr><td>Resena</td><td>Resenas de servicios o asesorias.</td><td><code>idResena</code>, <code>calificacion</code>, <code>comentario</code>.</td><td>Usuario, asesoria, solicitud servicio.</td></tr>
+  </table>
+  <pre>model Notificacion {
+  idNotificacion Int @id @default(autoincrement()) @map("id_notificacion")
+  idUsuario      Int? @map("id_usuario")
+  titulo         String? @db.VarChar(100)
+  mensaje        String? @db.Text
+  leida          Boolean? @default(false)
+}</pre>
+
+  <h1>8. Flujo general del sistema</h1>
+  <h2>Flujo de autenticacion</h2>
+  <ol>
+    <li>Usuario envia correo y contrasena.</li>
+    <li>Backend busca usuario por correo.</li>
+    <li>bcrypt compara contrasena.</li>
+    <li>Se valida que el usuario este activo.</li>
+    <li>Se genera JWT.</li>
+    <li>Frontend guarda token.</li>
+    <li><code>verifyToken</code> protege rutas privadas.</li>
+  </ol>
+  <h2>Flujo de servicios</h2>
+  <p>Usuario crea solicitud desde <code>ServiciosPage</code>. Frontend llama <code>POST /api/services</code>. Backend crea <code>SolicitudServicio</code>, notifica al usuario y notifica a administradores activos. Admin puede asignar tecnico, tipo, prioridad, estado y monto. Al asignar tecnico se crea o actualiza una cita.</p>
+  <h2>Flujo de citas</h2>
+  <p>Cita nace asociada a solicitud. Admin programa fecha/hora. Backend notifica a usuario y tecnico. Admin puede cambiar estado.</p>
+  <h2>Flujo de pagos</h2>
+  <p>Admin puede crear pago pendiente al definir monto. Usuario inicia pago con <code>POST /api/payments/:id/initiate</code>. Backend marca como pagado. Tecnico confirma medio de pago. Si hay desacuerdo, primer intento responde <code>409</code>. Segundo desacuerdo genera revision administrativa.</p>
+  <h2>Flujo de asesorias</h2>
+  <p>Usuario crea solicitud con descripcion, dispositivo, fecha, hora y telefonos. Backend crea asesoria en estado <code>Pendiente</code>. Usuario recibe confirmacion. Administradores reciben alerta. Asesor puede listar asesorias asignadas. Comentarios de asesoria aun no tienen relacion funcional completa.</p>
+
+  <h1>9. Roles del sistema</h1>
+  <table>
+    <tr><th>Rol</th><th>Funciones principales</th><th>Vistas disponibles</th></tr>
+    <tr><td>Admin</td><td>Usuarios, servicios, citas, pagos, informes, notificaciones.</td><td>Inicio, perfil, usuarios, servicios, citas, pagos, comentarios, notificaciones, informes.</td></tr>
+    <tr><td>Usuario</td><td>Crear servicios, pagar, solicitar asesoria, ver citas/notificaciones.</td><td>Inicio, perfil, servicios, asesoria, citas, pagos, comentarios, notificaciones.</td></tr>
+    <tr><td>Tecnico</td><td>Ver trabajos asignados, confirmar pagos, citas.</td><td>Inicio, perfil, servicios, citas, pagos, comentarios, notificaciones.</td></tr>
+    <tr><td>Asesor</td><td>Ver asesorias asignadas y comentarios de asesoria.</td><td>Inicio, perfil, mis asesorias, comentarios, notificaciones.</td></tr>
+  </table>
+
+  <h1>10. Seguridad del sistema</h1>
+  <p>El sistema protege rutas usando JWT. El frontend envia el token en el header Authorization y el backend lo valida con el middleware <code>verifyToken</code>.</p>
+  <pre>const header = req.headers.authorization || "";
+const token = header.startsWith("Bearer ") ? header.slice(7) : null;
+
+const payload = jwt.verify(token, env.jwtSecret);
+req.user = await authService.findMe(payload.userId);</pre>
+  <ul>
+    <li>No se confia en el rol enviado por frontend.</li>
+    <li>El backend obtiene identidad desde <code>req.user</code>.</li>
+    <li>Las contrasenas se guardan con bcrypt.</li>
+    <li>Las rutas privadas usan <code>verifyToken</code>.</li>
+    <li>Los servicios validan rol antes de operar.</li>
+    <li>La bandeja de notificaciones se filtra por <code>idUsuario = authUser.id</code>.</li>
+  </ul>
+
+  <h1>11. Fragmentos de codigo clave para exposicion</h1>
+  <h2>Frontend principal</h2>
+  <pre>if (!session) {
+  return &lt;AuthRoute ... /&gt;;
+}
+
+const ActiveRoute = getRouteById(tab, session).Component;</pre>
+  <p><strong>Importancia:</strong> decide si mostrar login o aplicacion autenticada.</p>
+
+  <h2>Rutas protegidas por rol</h2>
+  <pre>export const getVisibleRoutes = (session) =&gt;
+  appRoutes.filter((route) =&gt; route.roles?.includes(session?.rol));</pre>
+  <p><strong>Importancia:</strong> oculta vistas no permitidas.</p>
+
+  <h2>Cliente HTTP con token</h2>
+  <pre>...(token ? { Authorization: `Bearer ${token}` } : {})</pre>
+  <p><strong>Importancia:</strong> autentica todas las peticiones privadas.</p>
+
+  <h2>Login backend</h2>
+  <pre>const passwordMatches = await bcrypt.compare(password, user.contrasenaHash);</pre>
+  <p><strong>Importancia:</strong> valida contrasena cifrada.</p>
+
+  <h2>Middleware JWT</h2>
+  <pre>req.user = await authService.findMe(payload.userId);</pre>
+  <p><strong>Importancia:</strong> convierte token en usuario real de base de datos.</p>
+
+  <h2>Servicio por rol</h2>
+  <pre>const where = isAdmin(authUser)
+  ? {}
+  : isTechnician(authUser)
+    ? { citas: { some: { idUsuarioTecnico: authUser.id } } }
+    : { idUsuario: authUser.id };</pre>
+  <p><strong>Importancia:</strong> cada rol ve datos distintos.</p>
+
+  <h2>Notificaciones personales</h2>
+  <pre>const notifications = await prisma.notificacion.findMany({
+  where: { idUsuario: authUser.id },
+  orderBy: { fechaEnvio: "desc" },
+});</pre>
+  <p><strong>Importancia:</strong> evita que admin vea notificaciones ajenas.</p>
+
+  <h2>Proteccion por rol</h2>
+  <pre>if (authUser.role !== "admin") {
+  throw createError("Solo admin puede listar usuarios.", 403);
+}</pre>
+  <p><strong>Importancia:</strong> autorizacion en backend.</p>
+
+  <h2>Componente visual</h2>
+  <pre>&lt;BtnPrimary icon="check"&gt;
+  {saving ? "Enviando..." : "Solicitar asesoria"}
+&lt;/BtnPrimary&gt;</pre>
+  <p><strong>Importancia:</strong> reutilizacion visual y estado de interfaz.</p>
+
+  <h1>12. Explicacion lista para exponer</h1>
+  <h2>Introduccion</h2>
+  <p>FuturApp es una aplicacion full stack para gestionar servicios tecnicos. El sistema permite que usuarios soliciten servicios, administradores gestionen la operacion, tecnicos atiendan citas y asesores manejen solicitudes de asesoria.</p>
+  <h2>Frontend</h2>
+  <p>El frontend esta construido con React y Vite. Esta organizado por dominios: autenticacion, usuarios, servicios, citas, pagos, notificaciones y asesorias. Cada dominio tiene sus servicios API, mappers y componentes o rutas relacionadas.</p>
+  <h2>Backend</h2>
+  <p>El backend esta hecho con Node.js y Express. La API esta separada por modulos. Cada modulo tiene rutas, controladores, servicios y mappers. Las rutas se montan bajo <code>/api</code>.</p>
+  <h2>Base de datos</h2>
+  <p>La base de datos es MySQL/MariaDB y se accede mediante Prisma. El archivo <code>schema.prisma</code> define modelos en espanol como usuarios, roles, solicitudes, citas, pagos, notificaciones y asesorias.</p>
+  <h2>Autenticacion</h2>
+  <p>El login valida la contrasena con bcrypt y genera un JWT. Luego el frontend guarda el token y lo envia en cada peticion. El backend valida ese token con un middleware.</p>
+  <h2>Roles</h2>
+  <p>El sistema maneja cuatro roles: admin, tecnico, usuario y asesor. Cada rol tiene vistas y permisos distintos tanto en frontend como en backend.</p>
+  <h2>Servicios</h2>
+  <p>El usuario puede crear solicitudes. El administrador puede asignar tecnico, definir monto, prioridad y estado. El tecnico visualiza las solicitudes relacionadas con sus citas.</p>
+  <h2>Citas</h2>
+  <p>Las citas se relacionan con solicitudes de servicio, cliente y tecnico. El administrador programa la fecha y hora, y el sistema notifica a usuario y tecnico.</p>
+  <h2>Pagos</h2>
+  <p>Los pagos se asocian a citas. El usuario simula el pago y el tecnico confirma el medio. Si hay inconsistencias repetidas, se genera una alerta administrativa.</p>
+  <h2>Asesorias</h2>
+  <p>El modulo de asesorias permite que un usuario cree una solicitud inicial con descripcion, dispositivo y datos de contacto. El asesor puede ver las asesorias asignadas. La parte de comentarios de asesoria aun esta marcada como no funcional completamente.</p>
+  <h2>Conclusion</h2>
+  <p>En resumen, FuturApp esta organizado de forma modular, con separacion clara entre frontend, backend y base de datos. La seguridad se basa en JWT, roles y validaciones en backend.</p>
+
+  <h1>13. Hallazgos tecnicos</h1>
+  <h2>Partes bien organizadas</h2>
+  <ul>
+    <li>Backend modular por dominio.</li>
+    <li>Uso claro de servicios para logica de negocio.</li>
+    <li>Prisma mapea bien tablas en espanol.</li>
+    <li>Rutas protegidas con JWT.</li>
+    <li>Frontend dividido por dominios.</li>
+    <li>Cliente HTTP centralizado.</li>
+    <li>Notificaciones personales correctamente filtradas.</li>
+  </ul>
+  <h2>Partes que podrian mejorarse</h2>
+  <ul>
+    <li>Hay archivos legacy en <code>src/infrastructure/database</code>, <code>legacy*Mapper.js</code>, <code>seed.js</code> y almacenamiento local.</li>
+    <li>Algunos textos muestran caracteres mal codificados, por ejemplo <code>Token de autenticaciÃ³n</code>.</li>
+    <li>El modulo de comentarios de asesoria indica relacion no funcional.</li>
+    <li>El modelo <code>Resena</code> existe, pero no se encontraron endpoints REST activos especificos para resenas.</li>
+    <li>Hay backups de Prisma como <code>schema.phase2-before.prisma</code> y <code>schema.phase3b-before.prisma</code>, utiles como historico pero no parte activa.</li>
+    <li>Hay archivos temporales/logs en raiz como <code>tmp-vite-*.log</code> y capturas QA.</li>
+  </ul>
+  <h2>Archivos sensibles</h2>
+  <ul>
+    <li><code>.env</code> del backend, si existe localmente.</li>
+    <li><code>server/src/config/env.js</code>.</li>
+    <li><code>server/prisma/schema.prisma</code>.</li>
+    <li><code>server/prisma/seed.js</code>.</li>
+    <li>Backups SQL en <code>database/backups/</code>.</li>
+  </ul>
+  <h2>Recomendaciones</h2>
+  <ul>
+    <li>Crear documentacion formal de endpoints.</li>
+    <li>Limpiar o separar claramente codigo legacy.</li>
+    <li>Corregir codificacion UTF-8 en mensajes.</li>
+    <li>Completar comentarios de asesoria.</li>
+    <li>Implementar endpoints de resenas si seran parte del alcance.</li>
+    <li>Anadir pruebas automatizadas permanentes para flujos criticos.</li>
+  </ul>
+
+  <h1>14. Entregable final</h1>
+  <p><strong>Resumen ejecutivo:</strong> FuturApp es un sistema operativo de gestion tecnica con frontend React, backend Express, base MySQL y Prisma. Esta organizado por modulos funcionales y protegido por JWT y roles.</p>
+  <table>
+    <tr><th>Modulo</th><th>Frontend</th><th>Backend</th><th>Estado</th></tr>
+    <tr><td>Auth</td><td><code>domains/auth</code>, <code>AuthPage.jsx</code></td><td><code>modules/auth</code></td><td>Funcional</td></tr>
+    <tr><td>Usuarios</td><td><code>UsuariosPage.jsx</code></td><td><code>modules/users</code></td><td>Funcional</td></tr>
+    <tr><td>Servicios</td><td><code>ServiciosPage.jsx</code></td><td><code>modules/services</code></td><td>Funcional</td></tr>
+    <tr><td>Citas</td><td><code>CitasPage.jsx</code></td><td><code>modules/appointments</code></td><td>Funcional</td></tr>
+    <tr><td>Pagos</td><td><code>PagosPage.jsx</code></td><td><code>modules/payments</code></td><td>Funcional</td></tr>
+    <tr><td>Notificaciones</td><td><code>NotificacionesPage.jsx</code></td><td><code>modules/notifications</code></td><td>Funcional</td></tr>
+    <tr><td>Asesorias</td><td><code>UsuarioAsesoriaPage.jsx</code>, <code>AsesoriasPage.jsx</code></td><td><code>modules/advisories</code></td><td>Parcial / funcional base</td></tr>
+    <tr><td>Comentarios</td><td><code>ComentariosPage.jsx</code></td><td><code>modules/comments</code></td><td>Lectura funcional</td></tr>
+    <tr><td>Ubicaciones</td><td><code>domains/location</code>, <code>domains/maps</code></td><td><code>modules/locations</code></td><td>Base disponible</td></tr>
+    <tr><td>Informes</td><td><code>InformesPage.jsx</code></td><td>No se observo modulo backend propio</td><td>Principalmente frontend/local</td></tr>
+  </table>
+  <p class="note"><strong>Regla central para exposicion:</strong> El frontend organiza la experiencia por roles y consume una API REST. El backend valida identidad y permisos, aplica la logica de negocio y usa Prisma para comunicarse con MySQL.</p>
+</body>
+</html>

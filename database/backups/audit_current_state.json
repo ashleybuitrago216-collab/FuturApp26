@@ -1,0 +1,918 @@
+﻿{
+  "databases": [
+    "futurapp",
+    "futurapp_normalizacion_prueba",
+    "futurapp_normalizacion_prueba_2",
+    "futurapp_normalizacion_prueba_3",
+    "futurapp_normalizacion_prueba_4",
+    "futurapp_normalizacion_prueba_5",
+    "information_schema",
+    "mysql",
+    "performance_schema",
+    "phpmyadmin",
+    "prisma_migrate_shadow_db_18981432-e55a-482d-821f-cf9b7e95cefd",
+    "test",
+    "valcucini"
+  ],
+  "tableNames": [
+    "_prisma_migrations",
+    "areas_especialidad",
+    "asesorias",
+    "ayudas",
+    "citas",
+    "comentarios",
+    "equipos",
+    "estados",
+    "estados_pago",
+    "medios_pago",
+    "notificaciones",
+    "pagos",
+    "prioridades",
+    "reportes",
+    "resenas",
+    "respuestas_comentarios",
+    "roles",
+    "solicitudes_servicio",
+    "tipos_documento",
+    "tipos_notificacion",
+    "tipos_servicio",
+    "ubicaciones_tecnicos",
+    "usuarios",
+    "verificaciones_pago"
+  ],
+  "obsolete": [],
+  "countsApprox": [
+    {
+      "tableName": "areas_especialidad",
+      "approxRows": 4
+    },
+    {
+      "tableName": "asesorias",
+      "approxRows": 0
+    },
+    {
+      "tableName": "ayudas",
+      "approxRows": 0
+    },
+    {
+      "tableName": "citas",
+      "approxRows": 14
+    },
+    {
+      "tableName": "comentarios",
+      "approxRows": 5
+    },
+    {
+      "tableName": "equipos",
+      "approxRows": 5
+    },
+    {
+      "tableName": "estados",
+      "approxRows": 5
+    },
+    {
+      "tableName": "estados_pago",
+      "approxRows": 5
+    },
+    {
+      "tableName": "medios_pago",
+      "approxRows": 6
+    },
+    {
+      "tableName": "notificaciones",
+      "approxRows": 64
+    },
+    {
+      "tableName": "pagos",
+      "approxRows": 11
+    },
+    {
+      "tableName": "prioridades",
+      "approxRows": 5
+    },
+    {
+      "tableName": "reportes",
+      "approxRows": 0
+    },
+    {
+      "tableName": "resenas",
+      "approxRows": 0
+    },
+    {
+      "tableName": "respuestas_comentarios",
+      "approxRows": 5
+    },
+    {
+      "tableName": "roles",
+      "approxRows": 5
+    },
+    {
+      "tableName": "solicitudes_servicio",
+      "approxRows": 16
+    },
+    {
+      "tableName": "tipos_documento",
+      "approxRows": 5
+    },
+    {
+      "tableName": "tipos_notificacion",
+      "approxRows": 5
+    },
+    {
+      "tableName": "tipos_servicio",
+      "approxRows": 5
+    },
+    {
+      "tableName": "ubicaciones_tecnicos",
+      "approxRows": 5
+    },
+    {
+      "tableName": "usuarios",
+      "approxRows": 9
+    },
+    {
+      "tableName": "verificaciones_pago",
+      "approxRows": 3
+    },
+    {
+      "tableName": "_prisma_migrations",
+      "approxRows": 3
+    }
+  ],
+  "exactCounts": {
+    "_prisma_migrations": 3,
+    "areas_especialidad": 4,
+    "asesorias": 0,
+    "ayudas": 0,
+    "citas": 14,
+    "comentarios": 5,
+    "equipos": 5,
+    "estados": 5,
+    "estados_pago": 5,
+    "medios_pago": 7,
+    "notificaciones": 64,
+    "pagos": 11,
+    "prioridades": 5,
+    "reportes": 0,
+    "resenas": 0,
+    "respuestas_comentarios": 5,
+    "roles": 5,
+    "solicitudes_servicio": 16,
+    "tipos_documento": 5,
+    "tipos_notificacion": 5,
+    "tipos_servicio": 5,
+    "ubicaciones_tecnicos": 5,
+    "usuarios": 10,
+    "verificaciones_pago": 3
+  },
+  "fks": [
+    {
+      "tableName": "asesorias",
+      "constraintName": "fk_asesorias_area_especialidad",
+      "columnName": "id_area_especialidad",
+      "referencedTableName": "areas_especialidad",
+      "referencedColumnName": "id_area_especialidad"
+    },
+    {
+      "tableName": "asesorias",
+      "constraintName": "fk_asesorias_comentario",
+      "columnName": "id_comentario",
+      "referencedTableName": "comentarios",
+      "referencedColumnName": "id_comentario"
+    },
+    {
+      "tableName": "asesorias",
+      "constraintName": "fk_asesorias_notificacion",
+      "columnName": "id_notificacion",
+      "referencedTableName": "notificaciones",
+      "referencedColumnName": "id_notificacion"
+    },
+    {
+      "tableName": "asesorias",
+      "constraintName": "fk_asesorias_usuario",
+      "columnName": "id_usuario",
+      "referencedTableName": "usuarios",
+      "referencedColumnName": "id_usuario"
+    },
+    {
+      "tableName": "citas",
+      "constraintName": "fk_citas_estado",
+      "columnName": "id_estado",
+      "referencedTableName": "estados",
+      "referencedColumnName": "id_estado"
+    },
+    {
+      "tableName": "citas",
+      "constraintName": "fk_citas_solicitud_servicio",
+      "columnName": "id_solicitud_servicio",
+      "referencedTableName": "solicitudes_servicio",
+      "referencedColumnName": "id_solicitud_servicio"
+    },
+    {
+      "tableName": "citas",
+      "constraintName": "fk_citas_usuario_cliente",
+      "columnName": "id_usuario_cliente",
+      "referencedTableName": "usuarios",
+      "referencedColumnName": "id_usuario"
+    },
+    {
+      "tableName": "citas",
+      "constraintName": "fk_citas_usuario_tecnico",
+      "columnName": "id_usuario_tecnico",
+      "referencedTableName": "usuarios",
+      "referencedColumnName": "id_usuario"
+    },
+    {
+      "tableName": "comentarios",
+      "constraintName": "fk_comentarios_cita",
+      "columnName": "id_cita",
+      "referencedTableName": "citas",
+      "referencedColumnName": "id_cita"
+    },
+    {
+      "tableName": "comentarios",
+      "constraintName": "fk_comentarios_usuario",
+      "columnName": "id_usuario",
+      "referencedTableName": "usuarios",
+      "referencedColumnName": "id_usuario"
+    },
+    {
+      "tableName": "equipos",
+      "constraintName": "fk_equipos_estado",
+      "columnName": "id_estado",
+      "referencedTableName": "estados",
+      "referencedColumnName": "id_estado"
+    },
+    {
+      "tableName": "equipos",
+      "constraintName": "fk_equipos_usuario",
+      "columnName": "id_usuario",
+      "referencedTableName": "usuarios",
+      "referencedColumnName": "id_usuario"
+    },
+    {
+      "tableName": "notificaciones",
+      "constraintName": "fk_notificaciones_tipo_notificacion",
+      "columnName": "id_tipo_notificacion",
+      "referencedTableName": "tipos_notificacion",
+      "referencedColumnName": "id_tipo_notificacion"
+    },
+    {
+      "tableName": "notificaciones",
+      "constraintName": "fk_notificaciones_usuario",
+      "columnName": "id_usuario",
+      "referencedTableName": "usuarios",
+      "referencedColumnName": "id_usuario"
+    },
+    {
+      "tableName": "pagos",
+      "constraintName": "fk_pagos_cita",
+      "columnName": "id_cita",
+      "referencedTableName": "citas",
+      "referencedColumnName": "id_cita"
+    },
+    {
+      "tableName": "pagos",
+      "constraintName": "fk_pagos_estado_pago",
+      "columnName": "id_estado_pago",
+      "referencedTableName": "estados_pago",
+      "referencedColumnName": "id_estado_pago"
+    },
+    {
+      "tableName": "pagos",
+      "constraintName": "fk_pagos_medio_pago",
+      "columnName": "id_medio_pago",
+      "referencedTableName": "medios_pago",
+      "referencedColumnName": "id_medio_pago"
+    },
+    {
+      "tableName": "pagos",
+      "constraintName": "fk_pagos_usuario",
+      "columnName": "id_usuario",
+      "referencedTableName": "usuarios",
+      "referencedColumnName": "id_usuario"
+    },
+    {
+      "tableName": "reportes",
+      "constraintName": "fk_reportes_usuario",
+      "columnName": "id_usuario",
+      "referencedTableName": "usuarios",
+      "referencedColumnName": "id_usuario"
+    },
+    {
+      "tableName": "resenas",
+      "constraintName": "fk_resenas_asesoria",
+      "columnName": "id_asesoria",
+      "referencedTableName": "asesorias",
+      "referencedColumnName": "id_asesoria"
+    },
+    {
+      "tableName": "resenas",
+      "constraintName": "fk_resenas_solicitud_servicio",
+      "columnName": "id_solicitud_servicio",
+      "referencedTableName": "solicitudes_servicio",
+      "referencedColumnName": "id_solicitud_servicio"
+    },
+    {
+      "tableName": "resenas",
+      "constraintName": "fk_resenas_usuario",
+      "columnName": "id_usuario",
+      "referencedTableName": "usuarios",
+      "referencedColumnName": "id_usuario"
+    },
+    {
+      "tableName": "respuestas_comentarios",
+      "constraintName": "fk_respuestas_comentarios_comentario",
+      "columnName": "id_comentario",
+      "referencedTableName": "comentarios",
+      "referencedColumnName": "id_comentario"
+    },
+    {
+      "tableName": "respuestas_comentarios",
+      "constraintName": "fk_respuestas_comentarios_usuario_respondedor",
+      "columnName": "id_usuario_respondedor",
+      "referencedTableName": "usuarios",
+      "referencedColumnName": "id_usuario"
+    },
+    {
+      "tableName": "solicitudes_servicio",
+      "constraintName": "fk_solicitudes_servicio_equipo",
+      "columnName": "id_equipo",
+      "referencedTableName": "equipos",
+      "referencedColumnName": "id_equipo"
+    },
+    {
+      "tableName": "solicitudes_servicio",
+      "constraintName": "fk_solicitudes_servicio_estado",
+      "columnName": "id_estado",
+      "referencedTableName": "estados",
+      "referencedColumnName": "id_estado"
+    },
+    {
+      "tableName": "solicitudes_servicio",
+      "constraintName": "fk_solicitudes_servicio_prioridad",
+      "columnName": "id_prioridad",
+      "referencedTableName": "prioridades",
+      "referencedColumnName": "id_prioridad"
+    },
+    {
+      "tableName": "solicitudes_servicio",
+      "constraintName": "fk_solicitudes_servicio_tipo_servicio",
+      "columnName": "id_tipo_servicio",
+      "referencedTableName": "tipos_servicio",
+      "referencedColumnName": "id_tipo_servicio"
+    },
+    {
+      "tableName": "solicitudes_servicio",
+      "constraintName": "fk_solicitudes_servicio_usuario",
+      "columnName": "id_usuario",
+      "referencedTableName": "usuarios",
+      "referencedColumnName": "id_usuario"
+    },
+    {
+      "tableName": "ubicaciones_tecnicos",
+      "constraintName": "fk_ubicaciones_tecnicos_usuario",
+      "columnName": "id_usuario",
+      "referencedTableName": "usuarios",
+      "referencedColumnName": "id_usuario"
+    },
+    {
+      "tableName": "usuarios",
+      "constraintName": "fk_usuarios_area_especialidad",
+      "columnName": "id_area_especialidad",
+      "referencedTableName": "areas_especialidad",
+      "referencedColumnName": "id_area_especialidad"
+    },
+    {
+      "tableName": "usuarios",
+      "constraintName": "fk_usuarios_rol",
+      "columnName": "id_rol",
+      "referencedTableName": "roles",
+      "referencedColumnName": "id_rol"
+    },
+    {
+      "tableName": "usuarios",
+      "constraintName": "fk_usuarios_tipo_documento",
+      "columnName": "id_tipo_documento",
+      "referencedTableName": "tipos_documento",
+      "referencedColumnName": "id_tipo_documento"
+    },
+    {
+      "tableName": "verificaciones_pago",
+      "constraintName": "fk_verificaciones_pago_medio_pago_tecnico",
+      "columnName": "id_medio_pago_tecnico",
+      "referencedTableName": "medios_pago",
+      "referencedColumnName": "id_medio_pago"
+    },
+    {
+      "tableName": "verificaciones_pago",
+      "constraintName": "fk_verificaciones_pago_pago",
+      "columnName": "id_pago",
+      "referencedTableName": "pagos",
+      "referencedColumnName": "id_pago"
+    },
+    {
+      "tableName": "verificaciones_pago",
+      "constraintName": "fk_verificaciones_pago_usuario_tecnico",
+      "columnName": "id_usuario_tecnico",
+      "referencedTableName": "usuarios",
+      "referencedColumnName": "id_usuario"
+    }
+  ],
+  "uniqueIndexes": [
+    {
+      "tableName": "areas_especialidad",
+      "indexName": "nombre_area",
+      "columnsList": "nombre_area_especialidad"
+    },
+    {
+      "tableName": "areas_especialidad",
+      "indexName": "PRIMARY",
+      "columnsList": "id_area_especialidad"
+    },
+    {
+      "tableName": "asesorias",
+      "indexName": "PRIMARY",
+      "columnsList": "id_asesoria"
+    },
+    {
+      "tableName": "ayudas",
+      "indexName": "PRIMARY",
+      "columnsList": "id_ayuda"
+    },
+    {
+      "tableName": "citas",
+      "indexName": "PRIMARY",
+      "columnsList": "id_cita"
+    },
+    {
+      "tableName": "citas",
+      "indexName": "uq_citas_id_solicitud_servicio",
+      "columnsList": "id_solicitud_servicio"
+    },
+    {
+      "tableName": "comentarios",
+      "indexName": "PRIMARY",
+      "columnsList": "id_comentario"
+    },
+    {
+      "tableName": "equipos",
+      "indexName": "numero_serie",
+      "columnsList": "numero_serie"
+    },
+    {
+      "tableName": "equipos",
+      "indexName": "PRIMARY",
+      "columnsList": "id_equipo"
+    },
+    {
+      "tableName": "estados",
+      "indexName": "nombre_estado",
+      "columnsList": "nombre_estado"
+    },
+    {
+      "tableName": "estados",
+      "indexName": "PRIMARY",
+      "columnsList": "id_estado"
+    },
+    {
+      "tableName": "estados_pago",
+      "indexName": "PRIMARY",
+      "columnsList": "id_estado_pago"
+    },
+    {
+      "tableName": "medios_pago",
+      "indexName": "nombre_medio",
+      "columnsList": "nombre_medio_pago"
+    },
+    {
+      "tableName": "medios_pago",
+      "indexName": "PRIMARY",
+      "columnsList": "id_medio_pago"
+    },
+    {
+      "tableName": "notificaciones",
+      "indexName": "PRIMARY",
+      "columnsList": "id_notificacion"
+    },
+    {
+      "tableName": "pagos",
+      "indexName": "PRIMARY",
+      "columnsList": "id_pago"
+    },
+    {
+      "tableName": "prioridades",
+      "indexName": "nombre_prioridad",
+      "columnsList": "nombre_prioridad"
+    },
+    {
+      "tableName": "prioridades",
+      "indexName": "PRIMARY",
+      "columnsList": "id_prioridad"
+    },
+    {
+      "tableName": "reportes",
+      "indexName": "PRIMARY",
+      "columnsList": "id_reporte"
+    },
+    {
+      "tableName": "resenas",
+      "indexName": "PRIMARY",
+      "columnsList": "id_resena"
+    },
+    {
+      "tableName": "respuestas_comentarios",
+      "indexName": "PRIMARY",
+      "columnsList": "id_respuesta"
+    },
+    {
+      "tableName": "roles",
+      "indexName": "nombre_rol",
+      "columnsList": "nombre_rol"
+    },
+    {
+      "tableName": "roles",
+      "indexName": "PRIMARY",
+      "columnsList": "id_rol"
+    },
+    {
+      "tableName": "solicitudes_servicio",
+      "indexName": "PRIMARY",
+      "columnsList": "id_solicitud_servicio"
+    },
+    {
+      "tableName": "tipos_documento",
+      "indexName": "nombre_tipo",
+      "columnsList": "nombre_tipo_documento"
+    },
+    {
+      "tableName": "tipos_documento",
+      "indexName": "PRIMARY",
+      "columnsList": "id_tipo_documento"
+    },
+    {
+      "tableName": "tipos_documento",
+      "indexName": "tipo_abreviado",
+      "columnsList": "abreviatura_tipo_documento"
+    },
+    {
+      "tableName": "tipos_notificacion",
+      "indexName": "nombre_tipo",
+      "columnsList": "nombre_tipo_notificacion"
+    },
+    {
+      "tableName": "tipos_notificacion",
+      "indexName": "PRIMARY",
+      "columnsList": "id_tipo_notificacion"
+    },
+    {
+      "tableName": "tipos_servicio",
+      "indexName": "PRIMARY",
+      "columnsList": "id_tipo_servicio"
+    },
+    {
+      "tableName": "ubicaciones_tecnicos",
+      "indexName": "PRIMARY",
+      "columnsList": "id_ubicacion_tecnico"
+    },
+    {
+      "tableName": "usuarios",
+      "indexName": "correo",
+      "columnsList": "correo"
+    },
+    {
+      "tableName": "usuarios",
+      "indexName": "PRIMARY",
+      "columnsList": "id_usuario"
+    },
+    {
+      "tableName": "verificaciones_pago",
+      "indexName": "PRIMARY",
+      "columnsList": "id_verificacion_pago"
+    },
+    {
+      "tableName": "verificaciones_pago",
+      "indexName": "uq_verificaciones_pago_id_pago",
+      "columnsList": "id_pago"
+    },
+    {
+      "tableName": "_prisma_migrations",
+      "indexName": "PRIMARY",
+      "columnsList": "id"
+    }
+  ],
+  "columnsVerificacion": [
+    {
+      "columnName": "id_verificacion_pago",
+      "columnType": "int(11)",
+      "isNullable": "NO",
+      "columnDefault": null
+    },
+    {
+      "columnName": "id_pago",
+      "columnType": "int(11)",
+      "isNullable": "NO",
+      "columnDefault": null
+    },
+    {
+      "columnName": "id_usuario_tecnico",
+      "columnType": "int(11)",
+      "isNullable": "YES",
+      "columnDefault": "NULL"
+    },
+    {
+      "columnName": "id_medio_pago_tecnico",
+      "columnType": "int(11)",
+      "isNullable": "YES",
+      "columnDefault": "NULL"
+    },
+    {
+      "columnName": "cantidad_intentos",
+      "columnType": "int(11)",
+      "isNullable": "NO",
+      "columnDefault": "0"
+    },
+    {
+      "columnName": "metodos_coinciden",
+      "columnType": "tinyint(1)",
+      "isNullable": "YES",
+      "columnDefault": "NULL"
+    },
+    {
+      "columnName": "requiere_revision",
+      "columnType": "tinyint(1)",
+      "isNullable": "NO",
+      "columnDefault": "0"
+    },
+    {
+      "columnName": "observacion",
+      "columnType": "text",
+      "isNullable": "YES",
+      "columnDefault": "NULL"
+    },
+    {
+      "columnName": "fecha_primer_intento",
+      "columnType": "datetime",
+      "isNullable": "YES",
+      "columnDefault": "NULL"
+    },
+    {
+      "columnName": "fecha_confirmacion",
+      "columnType": "datetime",
+      "isNullable": "YES",
+      "columnDefault": "NULL"
+    }
+  ],
+  "createTables": [
+    {
+      "table": "pagos",
+      "create": [
+        {
+          "Table": "pagos",
+          "Create Table": "CREATE TABLE `pagos` (\n  `id_pago` int(11) NOT NULL AUTO_INCREMENT,\n  `id_cita` int(11) DEFAULT NULL,\n  `id_medio_pago` int(11) DEFAULT NULL,\n  `id_estado_pago` int(11) DEFAULT NULL,\n  `id_usuario` int(11) DEFAULT NULL,\n  `monto` decimal(10,2) DEFAULT NULL,\n  `fecha_pago` datetime DEFAULT current_timestamp(),\n  `detalle_comprobante` text DEFAULT NULL,\n  PRIMARY KEY (`id_pago`),\n  KEY `id_cita` (`id_cita`),\n  KEY `id_medio` (`id_medio_pago`),\n  KEY `id_estado_pago` (`id_estado_pago`),\n  KEY `id_usrs` (`id_usuario`),\n  CONSTRAINT `fk_pagos_cita` FOREIGN KEY (`id_cita`) REFERENCES `citas` (`id_cita`),\n  CONSTRAINT `fk_pagos_estado_pago` FOREIGN KEY (`id_estado_pago`) REFERENCES `estados_pago` (`id_estado_pago`),\n  CONSTRAINT `fk_pagos_medio_pago` FOREIGN KEY (`id_medio_pago`) REFERENCES `medios_pago` (`id_medio_pago`),\n  CONSTRAINT `fk_pagos_usuario` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id_usuario`)\n) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci"
+        }
+      ]
+    },
+    {
+      "table": "verificaciones_pago",
+      "create": [
+        {
+          "Table": "verificaciones_pago",
+          "Create Table": "CREATE TABLE `verificaciones_pago` (\n  `id_verificacion_pago` int(11) NOT NULL AUTO_INCREMENT,\n  `id_pago` int(11) NOT NULL,\n  `id_usuario_tecnico` int(11) DEFAULT NULL,\n  `id_medio_pago_tecnico` int(11) DEFAULT NULL,\n  `cantidad_intentos` int(11) NOT NULL DEFAULT 0,\n  `metodos_coinciden` tinyint(1) DEFAULT NULL,\n  `requiere_revision` tinyint(1) NOT NULL DEFAULT 0,\n  `observacion` text DEFAULT NULL,\n  `fecha_primer_intento` datetime DEFAULT NULL,\n  `fecha_confirmacion` datetime DEFAULT NULL,\n  PRIMARY KEY (`id_verificacion_pago`),\n  UNIQUE KEY `uq_verificaciones_pago_id_pago` (`id_pago`),\n  KEY `idx_verificaciones_pago_id_usuario_tecnico` (`id_usuario_tecnico`),\n  KEY `idx_verificaciones_pago_id_medio_pago_tecnico` (`id_medio_pago_tecnico`),\n  CONSTRAINT `fk_verificaciones_pago_medio_pago_tecnico` FOREIGN KEY (`id_medio_pago_tecnico`) REFERENCES `medios_pago` (`id_medio_pago`) ON DELETE SET NULL ON UPDATE CASCADE,\n  CONSTRAINT `fk_verificaciones_pago_pago` FOREIGN KEY (`id_pago`) REFERENCES `pagos` (`id_pago`) ON DELETE CASCADE ON UPDATE CASCADE,\n  CONSTRAINT `fk_verificaciones_pago_usuario_tecnico` FOREIGN KEY (`id_usuario_tecnico`) REFERENCES `usuarios` (`id_usuario`) ON DELETE SET NULL ON UPDATE CASCADE\n) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci"
+        }
+      ]
+    },
+    {
+      "table": "citas",
+      "create": [
+        {
+          "Table": "citas",
+          "Create Table": "CREATE TABLE `citas` (\n  `id_cita` int(11) NOT NULL AUTO_INCREMENT,\n  `id_solicitud_servicio` int(11) DEFAULT NULL,\n  `id_usuario_cliente` int(11) DEFAULT NULL,\n  `id_usuario_tecnico` int(11) DEFAULT NULL,\n  `fecha` date DEFAULT NULL,\n  `hora` time DEFAULT NULL,\n  `confirmada` tinyint(1) DEFAULT 0,\n  `id_estado` int(11) DEFAULT NULL,\n  PRIMARY KEY (`id_cita`),\n  UNIQUE KEY `uq_citas_id_solicitud_servicio` (`id_solicitud_servicio`),\n  KEY `id_solicitud` (`id_solicitud_servicio`),\n  KEY `id_usrs` (`id_usuario_cliente`),\n  KEY `id_estado` (`id_estado`),\n  KEY `idx_citas_id_usuario_cliente` (`id_usuario_cliente`),\n  KEY `idx_citas_id_usuario_tecnico` (`id_usuario_tecnico`),\n  CONSTRAINT `fk_citas_estado` FOREIGN KEY (`id_estado`) REFERENCES `estados` (`id_estado`),\n  CONSTRAINT `fk_citas_solicitud_servicio` FOREIGN KEY (`id_solicitud_servicio`) REFERENCES `solicitudes_servicio` (`id_solicitud_servicio`),\n  CONSTRAINT `fk_citas_usuario_cliente` FOREIGN KEY (`id_usuario_cliente`) REFERENCES `usuarios` (`id_usuario`),\n  CONSTRAINT `fk_citas_usuario_tecnico` FOREIGN KEY (`id_usuario_tecnico`) REFERENCES `usuarios` (`id_usuario`)\n) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci"
+        }
+      ]
+    },
+    {
+      "table": "solicitudes_servicio",
+      "create": [
+        {
+          "Table": "solicitudes_servicio",
+          "Create Table": "CREATE TABLE `solicitudes_servicio` (\n  `id_solicitud_servicio` int(11) NOT NULL AUTO_INCREMENT,\n  `id_usuario` int(11) DEFAULT NULL,\n  `id_equipo` varchar(25) DEFAULT NULL,\n  `id_tipo_servicio` int(11) DEFAULT NULL,\n  `descripcion_problema` varchar(255) DEFAULT NULL,\n  `id_prioridad` int(11) DEFAULT NULL,\n  `fecha_solicitud` datetime DEFAULT current_timestamp(),\n  `id_estado` int(11) DEFAULT NULL,\n  PRIMARY KEY (`id_solicitud_servicio`),\n  KEY `id_usrs` (`id_usuario`),\n  KEY `id_equipo` (`id_equipo`),\n  KEY `id_tp_servicio` (`id_tipo_servicio`),\n  KEY `id_prioridad` (`id_prioridad`),\n  KEY `id_estado` (`id_estado`),\n  CONSTRAINT `fk_solicitudes_servicio_equipo` FOREIGN KEY (`id_equipo`) REFERENCES `equipos` (`id_equipo`),\n  CONSTRAINT `fk_solicitudes_servicio_estado` FOREIGN KEY (`id_estado`) REFERENCES `estados` (`id_estado`),\n  CONSTRAINT `fk_solicitudes_servicio_prioridad` FOREIGN KEY (`id_prioridad`) REFERENCES `prioridades` (`id_prioridad`),\n  CONSTRAINT `fk_solicitudes_servicio_tipo_servicio` FOREIGN KEY (`id_tipo_servicio`) REFERENCES `tipos_servicio` (`id_tipo_servicio`),\n  CONSTRAINT `fk_solicitudes_servicio_usuario` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id_usuario`)\n) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci"
+        }
+      ]
+    },
+    {
+      "table": "usuarios",
+      "create": [
+        {
+          "Table": "usuarios",
+          "Create Table": "CREATE TABLE `usuarios` (\n  `id_usuario` int(11) NOT NULL AUTO_INCREMENT,\n  `id_tipo_documento` int(11) DEFAULT NULL,\n  `nombre` varchar(100) DEFAULT NULL,\n  `apellido` varchar(100) DEFAULT NULL,\n  `correo` varchar(150) DEFAULT NULL,\n  `contrasena_hash` varchar(255) DEFAULT NULL,\n  `telefono` varchar(15) DEFAULT NULL,\n  `direccion` varchar(100) DEFAULT NULL,\n  `id_area_especialidad` int(11) DEFAULT NULL,\n  `fecha_registro` datetime DEFAULT current_timestamp(),\n  `id_rol` int(11) DEFAULT NULL,\n  `activo` tinyint(1) DEFAULT 1,\n  PRIMARY KEY (`id_usuario`),\n  UNIQUE KEY `correo` (`correo`),\n  KEY `id_tp_doc` (`id_tipo_documento`),\n  KEY `id_area` (`id_area_especialidad`),\n  KEY `id_rol` (`id_rol`),\n  CONSTRAINT `fk_usuarios_area_especialidad` FOREIGN KEY (`id_area_especialidad`) REFERENCES `areas_especialidad` (`id_area_especialidad`),\n  CONSTRAINT `fk_usuarios_rol` FOREIGN KEY (`id_rol`) REFERENCES `roles` (`id_rol`),\n  CONSTRAINT `fk_usuarios_tipo_documento` FOREIGN KEY (`id_tipo_documento`) REFERENCES `tipos_documento` (`id_tipo_documento`)\n) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci"
+        }
+      ]
+    }
+  ],
+  "catalogs": {
+    "roles": [
+      {
+        "idRol": 1,
+        "nombreRol": "Administrador"
+      },
+      {
+        "idRol": 2,
+        "nombreRol": "Técnico"
+      },
+      {
+        "idRol": 3,
+        "nombreRol": "Cliente"
+      },
+      {
+        "idRol": 4,
+        "nombreRol": "Soporte"
+      },
+      {
+        "idRol": 5,
+        "nombreRol": "Visitante"
+      }
+    ],
+    "estados": [
+      {
+        "idEstado": 1,
+        "nombreEstado": "Activo"
+      },
+      {
+        "idEstado": 2,
+        "nombreEstado": "Pendiente"
+      },
+      {
+        "idEstado": 3,
+        "nombreEstado": "En Progreso"
+      },
+      {
+        "idEstado": 4,
+        "nombreEstado": "Finalizado"
+      },
+      {
+        "idEstado": 5,
+        "nombreEstado": "Cancelado"
+      }
+    ],
+    "estadosPago": [
+      {
+        "idEstadoPago": 1,
+        "nombreEstadoPago": "Pendiente de Pago",
+        "descripcion": "Esperando confirmación de la transacción."
+      },
+      {
+        "idEstadoPago": 2,
+        "nombreEstadoPago": "Pagado",
+        "descripcion": "El pago se ha completado exitosamente."
+      },
+      {
+        "idEstadoPago": 3,
+        "nombreEstadoPago": "Fallido",
+        "descripcion": "La transacción de pago no se pudo completar."
+      },
+      {
+        "idEstadoPago": 4,
+        "nombreEstadoPago": "Reembolsado",
+        "descripcion": "El monto total del pago fue devuelto."
+      },
+      {
+        "idEstadoPago": 5,
+        "nombreEstadoPago": "En Revisión",
+        "descripcion": "El pago está siendo verificado manualmente."
+      }
+    ],
+    "mediosPago": [
+      {
+        "idMedioPago": 1,
+        "nombreMedioPago": "Tarjeta de Crédito"
+      },
+      {
+        "idMedioPago": 2,
+        "nombreMedioPago": "Transferencia Bancaria"
+      },
+      {
+        "idMedioPago": 3,
+        "nombreMedioPago": "Pago en Efectivo"
+      },
+      {
+        "idMedioPago": 4,
+        "nombreMedioPago": "PayPal"
+      },
+      {
+        "idMedioPago": 5,
+        "nombreMedioPago": "Criptomonedas"
+      },
+      {
+        "idMedioPago": 6,
+        "nombreMedioPago": "Nequi"
+      },
+      {
+        "idMedioPago": 7,
+        "nombreMedioPago": "DaviPlata"
+      }
+    ],
+    "tiposServicio": [
+      {
+        "idTipoServicio": 1,
+        "nombreServicio": "Mantenimiento Preventivo PC",
+        "descripcionServicio": "Limpieza interna, optimización de software.",
+        "costo": "45"
+      },
+      {
+        "idTipoServicio": 2,
+        "nombreServicio": "Instalación de SO",
+        "descripcionServicio": "Formateo e instalación de Windows/Linux.",
+        "costo": "75"
+      },
+      {
+        "idTipoServicio": 3,
+        "nombreServicio": "Revisión de Red Doméstica",
+        "descripcionServicio": "Diagnóstico y configuración de router/Wi-Fi.",
+        "costo": "50"
+      },
+      {
+        "idTipoServicio": 4,
+        "nombreServicio": "Reparación de Pantalla Móvil",
+        "descripcionServicio": "Reemplazo de pantalla en smartphone o tablet.",
+        "costo": "120"
+      },
+      {
+        "idTipoServicio": 5,
+        "nombreServicio": "Asistencia Remota",
+        "descripcionServicio": "Soporte técnico por internet para problemas leves.",
+        "costo": "30"
+      }
+    ],
+    "tiposNotificacion": [
+      {
+        "idTipoNotificacion": 1,
+        "nombreTipoNotificacion": "Solicitud Creada"
+      },
+      {
+        "idTipoNotificacion": 2,
+        "nombreTipoNotificacion": "Cita Confirmada"
+      },
+      {
+        "idTipoNotificacion": 3,
+        "nombreTipoNotificacion": "Pago Recibido"
+      },
+      {
+        "idTipoNotificacion": 4,
+        "nombreTipoNotificacion": "Recordatorio de Cita"
+      },
+      {
+        "idTipoNotificacion": 5,
+        "nombreTipoNotificacion": "Comentario Nuevo"
+      }
+    ],
+    "prioridades": [
+      {
+        "idPrioridad": 1,
+        "nombrePrioridad": "Baja"
+      },
+      {
+        "idPrioridad": 2,
+        "nombrePrioridad": "Media"
+      },
+      {
+        "idPrioridad": 3,
+        "nombrePrioridad": "Alta"
+      },
+      {
+        "idPrioridad": 4,
+        "nombrePrioridad": "Urgente"
+      },
+      {
+        "idPrioridad": 5,
+        "nombrePrioridad": "Crítica"
+      }
+    ]
+  },
+  "demoUsers": [
+    {
+      "id": 6,
+      "email": "admin@futurapp.com",
+      "role": "Administrador",
+      "active": true,
+      "hasHash": true,
+      "hashLooksBcrypt": true
+    },
+    {
+      "id": 7,
+      "email": "tecnico@futurapp.com",
+      "role": "Técnico",
+      "active": true,
+      "hasHash": true,
+      "hashLooksBcrypt": true
+    },
+    {
+      "id": 8,
+      "email": "usuario@futurapp.com",
+      "role": "Cliente",
+      "active": true,
+      "hasHash": true,
+      "hashLooksBcrypt": true
+    }
+  ]
+}

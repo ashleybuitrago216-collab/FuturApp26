@@ -1,0 +1,192 @@
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum UserRole {
+  admin
+  tecnico
+  usuario
+}
+
+enum ServiceStatus {
+  Pendiente
+  Completado
+  Cancelado
+}
+
+enum PaymentStatus {
+  Pendiente
+  Pagado
+  Fallido
+  Reembolsado
+}
+
+enum AppointmentStatus {
+  Pendiente
+  Programada
+  Completada
+  Cancelada
+}
+
+model Role {
+  id          Int      @id @default(autoincrement())
+  name        UserRole @unique
+  description String?
+  users       User[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("roles")
+}
+
+model User {
+  id                    Int                   @id @default(autoincrement())
+  roleId                Int?
+  role                  Role?                 @relation(fields: [roleId], references: [id])
+  nombre                String
+  apellido              String?
+  correo                String                @unique
+  passwordHash          String
+  telefono              String?
+  tipoDocumento         String?
+  numeroDocumento       String?
+  direccion             String?
+  area                  String?
+  activo                Boolean               @default(true)
+  userRole              UserRole              @default(usuario)
+  services              Service[]             @relation("UserServices")
+  assignedServices      Service[]             @relation("TechnicianServices")
+  appointments          Appointment[]         @relation("UserAppointments")
+  technicianAppointments Appointment[]        @relation("TechnicianAppointments")
+  payments              Payment[]             @relation("UserPayments")
+  technicianPayments    Payment[]             @relation("TechnicianPayments")
+  notifications         Notification[]
+  comments              Comment[]
+  technicianLocations   TechnicianLocation[]
+  createdAt             DateTime              @default(now())
+  updatedAt             DateTime              @updatedAt
+
+  @@map("users")
+}
+
+model Service {
+  id           Int            @id @default(autoincrement())
+  userId       Int
+  technicianId Int?
+  user         User           @relation("UserServices", fields: [userId], references: [id])
+  technician   User?          @relation("TechnicianServices", fields: [technicianId], references: [id])
+  tipo         String
+  descripcion  String?
+  fecha        DateTime?
+  prioridad    String?
+  estado       ServiceStatus  @default(Pendiente)
+  valor        Decimal?       @db.Decimal(12, 2)
+  duracion     String?
+  appointments Appointment[]
+  payments     Payment[]
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+
+  @@index([userId])
+  @@index([technicianId])
+  @@map("services")
+}
+
+model Appointment {
+  id           Int               @id @default(autoincrement())
+  userId       Int
+  technicianId Int?
+  serviceId    Int?              @unique
+  user         User              @relation("UserAppointments", fields: [userId], references: [id])
+  technician   User?             @relation("TechnicianAppointments", fields: [technicianId], references: [id])
+  service      Service?          @relation(fields: [serviceId], references: [id])
+  fecha        DateTime?
+  hora         String?
+  contacto     String?
+  estado       AppointmentStatus @default(Pendiente)
+  payments     Payment[]
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
+
+  @@index([userId])
+  @@index([technicianId])
+  @@map("appointments")
+}
+
+model Payment {
+  id                    Int           @id @default(autoincrement())
+  transactionId         String?       @unique
+  userId                Int
+  technicianId          Int?
+  serviceId             Int?
+  appointmentId         Int?
+  user                  User          @relation("UserPayments", fields: [userId], references: [id])
+  technician            User?         @relation("TechnicianPayments", fields: [technicianId], references: [id])
+  service               Service?      @relation(fields: [serviceId], references: [id])
+  appointment           Appointment?  @relation(fields: [appointmentId], references: [id])
+  amount                Decimal       @db.Decimal(12, 2)
+  platformCommission    Decimal?      @db.Decimal(12, 2)
+  technicianEarnings    Decimal?      @db.Decimal(12, 2)
+  method                String?
+  status                PaymentStatus @default(Pendiente)
+  reference             String?
+  confirmedByTechnician Boolean       @default(false)
+  confirmedAt           DateTime?
+  paidAt                DateTime?
+  createdAt             DateTime      @default(now())
+  updatedAt             DateTime      @updatedAt
+
+  @@index([userId])
+  @@index([technicianId])
+  @@index([serviceId])
+  @@index([appointmentId])
+  @@map("payments")
+}
+
+model Notification {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+  message   String
+  type      String?
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@map("notifications")
+}
+
+model Comment {
+  id          Int      @id @default(autoincrement())
+  userId      Int
+  user        User     @relation(fields: [userId], references: [id])
+  text        String   @db.Text
+  response    String?  @db.Text
+  respondedBy String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([userId])
+  @@map("comments")
+}
+
+model TechnicianLocation {
+  id           Int      @id @default(autoincrement())
+  technicianId Int
+  technician   User     @relation(fields: [technicianId], references: [id])
+  latitude     Decimal  @db.Decimal(10, 7)
+  longitude    Decimal  @db.Decimal(10, 7)
+  status       String?
+  recordedAt   DateTime @default(now())
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([technicianId])
+  @@map("technician_locations")
+}
